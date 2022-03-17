@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\c# trainig\\ToyStore\\ToyStore\\ToyStore.csproj": {}
+    "E:\\c# trainig\\ToyStore\\ToysStore\\ToyStore\\ToyStore.csproj": {}
   },
   "projects": {
-    "E:\\c# trainig\\ToyStore\\ToyStore\\ToyStore.csproj": {
+    "E:\\c# trainig\\ToyStore\\ToysStore\\ToyStore\\ToyStore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\c# trainig\\ToyStore\\ToyStore\\ToyStore.csproj",
+        "projectUniqueName": "E:\\c# trainig\\ToyStore\\ToysStore\\ToyStore\\ToyStore.csproj",
         "projectName": "ToyStore",
-        "projectPath": "E:\\c# trainig\\ToyStore\\ToyStore\\ToyStore.csproj",
+        "projectPath": "E:\\c# trainig\\ToyStore\\ToysStore\\ToyStore\\ToyStore.csproj",
         "packagesPath": "C:\\Users\\Sema\\.nuget\\packages\\",
-        "outputPath": "E:\\c# trainig\\ToyStore\\ToyStore\\obj\\",
+        "outputPath": "E:\\c# trainig\\ToyStore\\ToysStore\\ToyStore\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -43,6 +43,16 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
