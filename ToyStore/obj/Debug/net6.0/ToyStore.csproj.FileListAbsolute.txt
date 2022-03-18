@@ -24,3 +24,10 @@ E:\c# trainig\ToyStore\ToysStore\ToyStore\obj\Debug\net6.0\refint\ToyStore.dll
 E:\c# trainig\ToyStore\ToysStore\ToyStore\obj\Debug\net6.0\ToyStore.pdb
 E:\c# trainig\ToyStore\ToysStore\ToyStore\obj\Debug\net6.0\ToyStore.genruntimeconfig.cache
 E:\c# trainig\ToyStore\ToysStore\ToyStore\obj\Debug\net6.0\ref\ToyStore.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\MySqlConnector.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Pomelo.EntityFrameworkCore.MySql.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\obj\Debug\net6.0\ToyStore.csproj.CopyComplete

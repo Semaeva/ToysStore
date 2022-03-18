@@ -12,7 +12,6 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ToyStore</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,11 +19,28 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-toys-babymaternity-flaticons-lineal-color-flat-icons.png"/></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+    <select name="categoryId" class="form-control">
+        @foreach(Category categor in Model.categories)
+        {
+            <option value="@categor.Id" data-url="@Url.Action("GatToysFromCategories", new { id = @categor.Id })">@categor.toy_name</option>
+        }
+    </select>
+
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Searching">Поиск</a>
+                        </li>
+                          <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Phone">Номер телефона</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Bag">Корзина</a>
+                        </li>
+                        
                     </ul>
                 </div>
             </div>
@@ -37,6 +53,15 @@
     </div>
 
     <footer class="border-top footer text-muted">
+        <div class="wrap">
+             <ol>
+       
+            <li><span>Ссылки на соц сети</span></li>
+            <li><span>Номер телефона</span></li>
+            <li><span>Способы оплаты</span></li>
+            <li><span>Форма подспики на рассылку</span></li>
+        </ol>
+        </div>
         <div class="container">
             &copy; 2022 - ToyStore - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
@@ -47,3 +72,13 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<style>
+.wrap ol {
+  list-style-position: inside;
+  -moz-column-count: 2; /* Firefox */
+  -webkit-column-count: 2; /* Safari and Chrome */
+  column-count: 2;
+  list-style-type: decimal;
+  height: 200px;
+}
+</style>
