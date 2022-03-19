@@ -6,7 +6,7 @@ namespace ToyStore.Models
     {
         public int Id { get; set; }
         [Display(Name = "Наименование товара")]
-        public string toy_name { get; set; }
+        public string category_name { get; set; }
 
         public ICollection<Users> Users { get; set; }
         public ICollection<Toys> toys { get; set; }

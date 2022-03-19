@@ -1,6 +1,4 @@
-﻿@*@model IEnumerable<ToyStore.Models.Category>
-*@
-
+﻿
 @using ToyStore.Models;
 @using ToyStore.ViewsModel;
 @model IndexViewModel
@@ -9,22 +7,199 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
+    <link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css"
+          rel="Stylesheet" type="text/css"/>
+
+<div class="slideshow-container">
+
+<div class="mySlides fade">
+  <div class="numbertext">1 / 4</div>
+  <img src="https://www.i-igrushki.ru/upload/medialibrary/a10/a109743805b253a5a7cdbd0af72932a1.jpg" style="width:100%">
+  <div class="text">Caption Text</div>
 </div>
 
-@*@foreach(var item in Model)
-{
-  <td>@Html.DisplayFor(modelItem => item.toy_name)</td>
-                  
+<div class="mySlides fade">
+  <div class="numbertext">2 / 4</div>
+  <img src="https://images.ua.prom.st/652184802_w640_h640_fisher_prays_0.jpg" style="width:100%">
+  <div class="text">Caption Two</div>
+</div>
 
-}*@
+<div class="mySlides fade">
+  <div class="numbertext">3 / 4</div>
+  <img src="https://thumbs.dreamstime.com/z/вид-сверху-на-детские-игрушки-голубом-фоне-столе-концепция-рекламных-162976019.jpg" style="width:100%">
+  <div class="text">Caption Three</div>
+</div>
 
-@*<table class="table">
-    @foreach (Category p in Model.categories)
+<div class="mySlides fade">
+  <div class="numbertext">4 / 4</div>
+  <img src="https://education.lego.com/v3/assets/blt293eea581807678a/blt393b7ca2feefb0c1/60d2cd32ae0d50495b4f911f/LLS_ModDetail_04.png?auto=webp&format=png&width=1800&quality=90&fit=bounds" style="width:100%"/>
+  <div class="text">Caption Three</div>
+</div>
+
+</div>
+<br>
+
+
+@*<div style="text-align:center">
+  <span class="dot"></span> 
+  <span class="dot"></span> 
+  <span class="dot"></span> 
+   <span class="dot"></span> 
+</div>
+
+
+<div class="box">
+  <div class="col">Акция</div>
+  <div class="col">Распродажа</div>
+ 
+</div>
+
+<div class="box">
+  <div class="col">Новинка</div>
+  <div class="col">Хит продаж</div>
+ 
+</div>
+
+*@
+<table class="table">
+    <tr>
+            <th>Игрушка</th>
+            <th>Описание</th>
+        </tr>
+    @foreach (Toys toy in Model.Toys)
     {
-        <tr><td>@p.toy_name</td>
-  }
-</table>*@
+      <tr><td>@toy.toy_name</td>
+            <td>@toy.description</td>
+            </tr>
+    }
+</table>
+ <link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css"
+          rel="Stylesheet" type="text/css"/>
 
+<script>
+var slideIndex = 0;
+showSlides();
+
+function showSlides() {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+    var dots = document.getElementsByClassName("dot");
+    for (i = 0; i < slides.length; i++) {
+       slides[i].style.display = "none";  
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) {slideIndex = 1}    
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";  
+    dots[slideIndex-1].className += " active";
+    setTimeout(showSlides, 3000); // Change image every 3 seconds
+}
+    </script>
+</body>
+</html> 
+
+
+
+<style>
+* {box-sizing: border-box;}
+body {font-family: Verdana, sans-serif;
+
+  position: relative;
+  height: auto;
+  min-height: 100% !important;
+}
+.mySlides {display: none; height:30%}
+img {vertical-align: middle;}
+
+    .box {
+  width: 400px;
+  display: flex;
+}
+
+.col {
+  flex: 0 1 100%;
+  height: 100px;
+  border: 1px solid gray;
+}
+
+/* Slideshow container */
+.slideshow-container {
+/*  max-width: 1000px;
+*/  position: relative;
+  margin: auto;
+  height: 50%;
+
+   height:100px
+    width:auto;/*maintain aspect ratio*/
+    max-width:400px;
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@@-webkit-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+/* On smaller screens, decrease text size */
+@@media only screen and (max-width: 300px) {
+  .text {font-size: 11px}
+}
+</style>
