@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using ToyStore.Models;
 using ToyStore.ViewsModel;
@@ -10,6 +11,7 @@ namespace ToyStore.Controllers
     {
 
         ApplicationContext db;
+        private IndexViewModel model = new IndexViewModel();
 
         private readonly ILogger<HomeController> _logger;
 
@@ -20,15 +22,10 @@ namespace ToyStore.Controllers
             db = context;
         }
 
-
+   
         public IActionResult Index(int? categoryId)
         {
-           var categoriesModel = db.categories
-         .Select(c => new Category { Id = c.Id, category_name = c.category_name })
-         .ToList();
-            categoriesModel.Insert(0, new Category { Id = 0, category_name = "Каталог" });
-            IndexViewModel category = new IndexViewModel { categories = categoriesModel };
-            ViewBag.category = category;
+            ViewBag.category = model.Searching(db);
             var toysModel = db.toys
                 .Select(x => new Toys {Id =x.Id,toy_name = x.toy_name, description= x.description })
                 .ToList();
@@ -40,15 +37,8 @@ namespace ToyStore.Controllers
         [HttpPost]
         public IActionResult Index(string toyName, string toyId)
         {
+            ViewBag.category = model.Searching(db);
 
-            ViewBag.Message = "toyName: " + toyName + " toyId: " + toyId;
-
-            var categoriesModel = db.categories
-         .Select(c => new Category { Id = c.Id, category_name = c.category_name })
-         .ToList();
-            categoriesModel.Insert(0, new Category { Id = 0, category_name = "Каталог" });
-            IndexViewModel category = new IndexViewModel { categories = categoriesModel };
-            ViewBag.category = category;
             var toysModel = db.toys
                 .Where(x => x.toy_name == toyName)
                 .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name, description = x.description })
@@ -73,7 +63,20 @@ namespace ToyStore.Controllers
 
             return Json(customers);
         }
+        public async Task<IActionResult> Orders(int idUser, int idToys) {
+            ViewBag.category = model.Searching(db);
 
+            var user = db.users.Include(x => x.toy)
+                .Where(u=>u.id == idUser)
+                .ToList();
+            
+                foreach (var u in user)
+                {
+                var list = u.toy.Where(x => x.Id == idToys).ToList();
+                     return View(list);
+                }
+            return View();
+        }
 
         public async Task<IActionResult> Catalog()
         {

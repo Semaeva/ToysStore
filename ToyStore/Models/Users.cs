@@ -11,14 +11,16 @@ namespace ToyStore.Models
         [Display(Name = "Пароль")]
         public string passw { get; set; }
 
-        public int? rolesID { get; set; }
-        public UserRole userRole { get; set; }
 
+        public ICollection<UserRole> userRoles { get; set; }
+        public List<userOrder> userOrders { get; set; } = new List<userOrder>();
+        public List<Toys> toy { get; set; } = new List<Toys>();
+        //  public ICollection<userOrder> userOrders { get; set; }
 
-        public ICollection<Category> toyCatalogs { get; set; }
         public Users()
         {
-            toyCatalogs = new List<Category>();
+           // userOrders= new List<userOrder>();
+            userRoles= new List<UserRole>();
         }
 
 
