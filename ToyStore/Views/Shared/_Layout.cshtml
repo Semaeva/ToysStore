@@ -50,7 +50,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Phone">Номер телефона</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-route-idUser="1" asp-route-idToys="3" asp-controller="Home" asp-action="Orders">Корзина</a>
+                            <a class="nav-link text-dark" asp-area="" asp-route-idUser="1" asp-route-idToys="3" asp-controller="Order" asp-action="Index">Корзина</a>
                         </li>
                         
                     </ul>
@@ -64,7 +64,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+  @*  <footer class="border-top footer text-muted">
         <div class="wrap">
              <ol>
        
@@ -77,7 +77,7 @@
         <div class="container">
             &copy; 2022 - ToyStore - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+    </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -88,6 +88,7 @@
 </body>
 </html>
 <style>
+
 .wrap ol {
   list-style-position: inside;
   -moz-column-count: 2; /* Firefox */

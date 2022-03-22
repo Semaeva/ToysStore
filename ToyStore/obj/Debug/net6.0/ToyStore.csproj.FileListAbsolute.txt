@@ -31,3 +31,4 @@ E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Microsoft.Extensions.
 E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\MySqlConnector.dll
 E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Pomelo.EntityFrameworkCore.MySql.dll
 E:\c# trainig\ToyStore\ToysStore\ToyStore\obj\Debug\net6.0\ToyStore.csproj.CopyComplete
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Newtonsoft.Json.dll

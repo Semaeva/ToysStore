@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using ToyStore.Models;
+using ToyStore.SessionExtension;
 using ToyStore.ViewsModel;
 
 namespace ToyStore.Controllers
@@ -25,27 +27,30 @@ namespace ToyStore.Controllers
    
         public IActionResult Index(int? categoryId)
         {
+           
+            ViewBag.currentId="";
             ViewBag.category = model.Searching(db);
             var toysModel = db.toys
-                .Select(x => new Toys {Id =x.Id,toy_name = x.toy_name, description= x.description })
+                .Select(x => new Toys {Id =x.Id,toy_name = x.toy_name,price=x.price, description= x.description })
                 .ToList();
                 IndexViewModel toys = new IndexViewModel { Toys = toysModel };
 
-                return View(toys);
+            HttpContext.Session.SetObjectAsJson("ToyNames", toys);
+            return View(toys);
         }
 
         [HttpPost]
-        public IActionResult Index(string toyName, string toyId)
+        public IActionResult Index(int toyId, string userId)
         {
             ViewBag.category = model.Searching(db);
-
+           
             var toysModel = db.toys
-                .Where(x => x.toy_name == toyName)
-                .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name, description = x.description })
+                .Where(x => x.Id == toyId)
+                .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name,price=x.price, description = x.description })
                 .ToList();
            
             IndexViewModel toys = new IndexViewModel { Toys = toysModel };
-
+            HttpContext.Session.SetObjectAsJson("ToyNames", toys);
             return View(toys);
         }
 
@@ -63,20 +68,7 @@ namespace ToyStore.Controllers
 
             return Json(customers);
         }
-        public async Task<IActionResult> Orders(int idUser, int idToys) {
-            ViewBag.category = model.Searching(db);
-
-            var user = db.users.Include(x => x.toy)
-                .Where(u=>u.id == idUser)
-                .ToList();
-            
-                foreach (var u in user)
-                {
-                var list = u.toy.Where(x => x.Id == idToys).ToList();
-                     return View(list);
-                }
-            return View();
-        }
+    
 
         public async Task<IActionResult> Catalog()
         {
