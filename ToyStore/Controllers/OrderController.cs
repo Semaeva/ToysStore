@@ -21,14 +21,6 @@ namespace ToyStore.Controllers
             ViewBag.category = model.Searching(db);
             var prod = HttpContext.Session.GetObjectFromJson<IndexViewModel>("ToyNames");
 
-            //var user = db.users.Include(x => x.toy)
-            //    .Where(u => u.id == idUser)
-            //    .ToList();
-            //foreach (var u in user)
-            //{
-            //    var list = u.toy.Where(x => x.Id == idToys).ToList();
-            //    return View(list);
-            //}
             return View(prod);
         }
 

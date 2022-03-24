@@ -39,17 +39,18 @@ namespace ToyStore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(int toyId, string userId)
+        public IActionResult Index(int toyId)
         {
             ViewBag.category = model.Searching(db);
-           
+
             var toysModel = db.toys
                 .Where(x => x.Id == toyId)
-                .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name,price=x.price, description = x.description })
+                .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name,price=x.price, description = x.description})
                 .ToList();
            
             IndexViewModel toys = new IndexViewModel { Toys = toysModel };
             HttpContext.Session.SetObjectAsJson("ToyNames", toys);
+
             return RedirectToAction("Index");
         }
 

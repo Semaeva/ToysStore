@@ -6,7 +6,6 @@
         public string toy_name { get; set; }
 
         public float price { get; set; }
-        public int quantity { get; set; }
         public float summa { get; set; }
 
 
