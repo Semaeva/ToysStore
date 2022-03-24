@@ -19,16 +19,16 @@ namespace ToyStore.Controllers
         public ActionResult Index(int idUser, int idToys)
         {
             ViewBag.category = model.Searching(db);
-            var prod = HttpContext.Session.GetObjectFromJson<Toys>("ToyNames");
+            var prod = HttpContext.Session.GetObjectFromJson<IndexViewModel>("ToyNames");
 
-            var user = db.users.Include(x => x.toy)
-                .Where(u => u.id == idUser)
-                .ToList();
-            foreach (var u in user)
-            {
-                var list = u.toy.Where(x => x.Id == idToys).ToList();
-                return View(list);
-            }
+            //var user = db.users.Include(x => x.toy)
+            //    .Where(u => u.id == idUser)
+            //    .ToList();
+            //foreach (var u in user)
+            //{
+            //    var list = u.toy.Where(x => x.Id == idToys).ToList();
+            //    return View(list);
+            //}
             return View(prod);
         }
 

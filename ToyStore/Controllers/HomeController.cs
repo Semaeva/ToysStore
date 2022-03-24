@@ -35,7 +35,6 @@ namespace ToyStore.Controllers
                 .ToList();
                 IndexViewModel toys = new IndexViewModel { Toys = toysModel };
 
-            HttpContext.Session.SetObjectAsJson("ToyNames", toys);
             return View(toys);
         }
 
@@ -51,7 +50,7 @@ namespace ToyStore.Controllers
            
             IndexViewModel toys = new IndexViewModel { Toys = toysModel };
             HttpContext.Session.SetObjectAsJson("ToyNames", toys);
-            return View(toys);
+            return RedirectToAction("Index");
         }
 
 
