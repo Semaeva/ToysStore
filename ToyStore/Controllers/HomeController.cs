@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using ToyStore.Models;
+using ToyStore.SessionExtension;
 using ToyStore.ViewsModel;
 
 namespace ToyStore.Controllers
@@ -10,6 +13,7 @@ namespace ToyStore.Controllers
     {
 
         ApplicationContext db;
+        private IndexViewModel model = new IndexViewModel();
 
         private readonly ILogger<HomeController> _logger;
 
@@ -20,43 +24,34 @@ namespace ToyStore.Controllers
             db = context;
         }
 
-
+   
         public IActionResult Index(int? categoryId)
         {
-           var categoriesModel = db.categories
-         .Select(c => new Category { Id = c.Id, category_name = c.category_name })
-         .ToList();
-            categoriesModel.Insert(0, new Category { Id = 0, category_name = "Каталог" });
-            IndexViewModel category = new IndexViewModel { categories = categoriesModel };
-            ViewBag.category = category;
+           
+            ViewBag.currentId="";
+            ViewBag.category = model.Searching(db);
             var toysModel = db.toys
-                .Select(x => new Toys {Id =x.Id,toy_name = x.toy_name, description= x.description })
+                .Select(x => new Toys {Id =x.Id,toy_name = x.toy_name,price=x.price, description= x.description })
                 .ToList();
                 IndexViewModel toys = new IndexViewModel { Toys = toysModel };
 
-                return View(toys);
+            return View(toys);
         }
 
         [HttpPost]
-        public IActionResult Index(string toyName, string toyId)
+        public IActionResult Index(int toyId)
         {
+            ViewBag.category = model.Searching(db);
 
-            ViewBag.Message = "toyName: " + toyName + " toyId: " + toyId;
-
-            var categoriesModel = db.categories
-         .Select(c => new Category { Id = c.Id, category_name = c.category_name })
-         .ToList();
-            categoriesModel.Insert(0, new Category { Id = 0, category_name = "Каталог" });
-            IndexViewModel category = new IndexViewModel { categories = categoriesModel };
-            ViewBag.category = category;
             var toysModel = db.toys
-                .Where(x => x.toy_name == toyName)
-                .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name, description = x.description })
+                .Where(x => x.Id == toyId)
+                .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name,price=x.price, description = x.description})
                 .ToList();
            
             IndexViewModel toys = new IndexViewModel { Toys = toysModel };
+            HttpContext.Session.SetObjectAsJson("ToyNames", toys);
 
-            return View(toys);
+            return RedirectToAction("Index");
         }
 
 
@@ -73,7 +68,7 @@ namespace ToyStore.Controllers
 
             return Json(customers);
         }
-
+    
 
         public async Task<IActionResult> Catalog()
         {
