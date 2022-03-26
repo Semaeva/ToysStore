@@ -24,22 +24,17 @@
       <div id="alerts"></div>
 <div class="productcont">
      @foreach (Toys toy in Model.Toys){
-
-       @* <div class="product">*@
+         <p id="toyId" hidden> @toy.Id</p>
             <div class="child">
-            <h3 class="productname">@toy.toy_name</h3>
-            <p>@toy.description</p>
-            <p class="price">@toy.price</p>
                     @using(Html.BeginForm("Index", "Home",new {toyId = @toy.Id, userId =@ViewBag.currentId}, FormMethod.Post, null, new {@id="form" }))
-                    {        
-                    <input type="text" value="@toy.toy_name" hidden name="toy_name">
-                    <input type="text" value="@toy.description" hidden name="description">
-                    <input type="text" value="@toy.price" hidden name="price">
-                           <input class="addtocart" type="submit" id ="sbm" value="Send" >         
+                    {       
+                           <h3 class="productname" >@toy.toy_name</h3>
+                            <p>@toy.description</p>
+                            <p class="price">@toy.price</p>
+                          <input class="addtocart"  type="submit" id ="sbm" value="Send" >         
                 }
-@*            <button class="addtocart">В корзину</button>
-*@        </div>
-@* </div>*@
+            </div>
+
      }
     
         </div>
@@ -121,7 +116,7 @@ document.getElementById("emptycart").addEventListener("click", emptyCart);
 var btns = document.getElementsByClassName('addtocart');
 for (var i = 0; i < btns.length; i++) {
     btns[i].addEventListener('click', function() {addToCart(this);
-        document.getElementById('form').submit();      
+        //document.getElementById ('sbm').click();
     });
 }
 
@@ -134,6 +129,8 @@ $.ajax({
       console.log('cleraed'); 
    });
 }
+
+
 function addToCart(elem) {   
     var sibs = [];
     var getprice;
@@ -185,7 +182,7 @@ function updateCartTotal(){
     if(sessionStorage.getItem('cart')) {
         var cart = JSON.parse(sessionStorage.getItem('cart'));
         items = cart.length;
-        
+
         for (var i = 0; i < items; i++){
             var x = JSON.parse(cart[i]);
             price = parseFloat(x.price);
