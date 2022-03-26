@@ -19,8 +19,14 @@ namespace ToyStore.Controllers
         public ActionResult Index(int idUser, int idToys)
         {
             ViewBag.category = model.Searching(db);
-            var prod = HttpContext.Session.GetObjectFromJson<IndexViewModel>("ToyNames");
-            return View(prod);
+                 var cart = HttpContext.Session.GetObjectFromJson<IndexViewModel>("ToyNames");
+            if(cart == null)
+            {
+                ViewBag.err = "Корзина пуста";
+            }
+                return View(cart);
+       
+                
         }
 
 

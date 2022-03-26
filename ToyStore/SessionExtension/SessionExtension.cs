@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using ToyStore.ViewsModel;
 
 namespace ToyStore.SessionExtension
 {
@@ -16,5 +17,6 @@ namespace ToyStore.SessionExtension
             return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
         }
 
+       
     }
 }

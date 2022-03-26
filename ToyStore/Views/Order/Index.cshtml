@@ -11,6 +11,7 @@
         @toy.toy_name <br>
         @toy.description <br>
         @toy.price <br>
+           @toy.summa <br>
         @* @toy.quantity <br>*@
     }
     @using (@Html.BeginForm("Create", "Order", new { }, FormMethod.Post))
@@ -18,5 +19,7 @@
         <label for="quantity">Количество:</label>
         <input type="number" name="quantity" value=1 min="1" max="10">
     }
-}else{
+}
+else
+{
 <p>empty</p>}
