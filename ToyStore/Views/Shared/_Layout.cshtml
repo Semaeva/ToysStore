@@ -50,7 +50,28 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Phone">Номер телефона</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-route-idUser="1" asp-route-idToys="3" asp-controller="Order" asp-action="Index">Корзина</a>
+                            <div class="grid-container-nav">
+                                 <div class="grid-item-nav">
+                            <a class="nav-link text-dark" asp-area="" asp-route-idUser="1" asp-route-idToys="3" asp-controller="Order" asp-action="Index"><img src="https://img.icons8.com/office/30/000000/shopping-cart.png"/></a>
+                      </div>
+                            <div class="grid-item-nav">
+                            <table id="carttotals">
+            <tr>
+              <td><strong>Items</strong></td>
+              <td><strong>Total</strong></td>
+            </tr>
+            <tr>
+              <td>x <span id="itemsquantity">0</span></td>
+             
+              <td>$<span id="total">0</span></td>
+            </tr></table>
+            </div>
+            <div class="grid-item-nav">
+          <div class="cart-buttons">  
+            <button id="emptycart">Очистить</button>
+          </div>
+          </div>
+          </div>              
                         </li>
                         
                     </ul>
@@ -96,6 +117,17 @@
   column-count: 2;
   list-style-type: decimal;
   height: 200px;
+}
+.grid-container-nav {
+  display: grid;
+  grid-template-columns: auto auto auto ;
+  padding: 10px;
+}
+.grid-item-nav {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  font-size: 10px;
+  text-align: center;
 }
 </style>
 

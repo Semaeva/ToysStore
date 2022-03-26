@@ -20,7 +20,6 @@ namespace ToyStore.Controllers
         {
             ViewBag.category = model.Searching(db);
             var prod = HttpContext.Session.GetObjectFromJson<IndexViewModel>("ToyNames");
-
             return View(prod);
         }
 
@@ -39,6 +38,14 @@ namespace ToyStore.Controllers
         {
             userId = ViewBag.currentId;
             return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult RemoveSession()
+        {
+             HttpContext.Session.Remove("ToyNames");
+           return RedirectToAction("Index", "Home");
         }
 
         // POST: OrderController/Create

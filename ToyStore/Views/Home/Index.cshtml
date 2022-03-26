@@ -14,47 +14,36 @@
 
 </head>
 <body>
+    <div id="parent">
+<div class="grid-container">
+      <div class="grid-item">Акции</div>
+            <div class="grid-item">Хит</div>
+                 <div class="grid-item">Распродажа</div>
+                     <div class="grid-item">Новинка</div>
+                     </div>
       <div id="alerts"></div>
 <div class="productcont">
      @foreach (Toys toy in Model.Toys){
-        <div class="product">
+
+       @* <div class="product">*@
+            <div class="child">
             <h3 class="productname">@toy.toy_name</h3>
             <p>@toy.description</p>
             <p class="price">@toy.price</p>
-            <button class="addtocart">Add To Cart</button>
+                    @using(Html.BeginForm("Index", "Home",new {toyId = @toy.Id, userId =@ViewBag.currentId}, FormMethod.Post, null, new {@id="form" }))
+                    {        
+                    <input type="text" value="@toy.toy_name" hidden name="toy_name">
+                    <input type="text" value="@toy.description" hidden name="description">
+                    <input type="text" value="@toy.price" hidden name="price">
+                                     
+                }
+            <button class="addtocart">В корзину</button>
         </div>
+@* </div>*@
      }
+    
         </div>
-        <div class="cart-container">
-          <h2>Cart</h2>
-          <table>
-            <thead>
-              <tr>
-              <th><strong>Product</strong></th>
-              <th><strong>Price</strong></th>
-            </tr>
-            </thead>
-            <tbody id="carttable">
-            </tbody>
-          </table>
-          <hr>
-          <table id="carttotals">
-            <tr>
-              <td><strong>Items</strong></td>
-              <td><strong>Total</strong></td>
-            </tr>
-            <tr>
-              <td>x <span id="itemsquantity">0</span></td>
-             
-              <td>$<span id="total">0</span></td>
-            </tr></table>
-
-            
-          <div class="cart-buttons">  
-            <button id="emptycart">Empty Cart</button>
-            <button id="checkout">Checkout</button>
-          </div>
-        </div>
+      
 </div>
 <div class="slideshow-container">
 
@@ -85,40 +74,7 @@
 </div>
 <br>
 
-<div id="parent">
-<div class="grid-container">
-      <div class="grid-item">Акции</div>
-            <div class="grid-item">Хит</div>
-                 <div class="grid-item">Распродажа</div>
-                     <div class="grid-item">Новинка</div>
-                     </div>
 
-               
-          @foreach (Toys toy in Model.Toys){
-                    <div class="productcont">
-                <div class="product">
-          @*  <div class="child">
-              <p class="toy_name">   Наименование: @toy.toy_name</p> <br>
-              <p class="description">   Описание: @toy.description </p><br>
-              <p class="price" >  Цена: @toy.price </p><br>
-
-                  <p class="price">$5.05</p>
-                    <button class="addtocart">Add To Cart</button>
-
-               
-                 @using(Html.BeginForm("Index", "Home",new {toyId = @toy.Id, userId =@ViewBag.currentId}, FormMethod.Post))
-                {        
-                    <input type="text" value="@toy.toy_name" hidden name="toy_name">
-                    <input type="text" value="@toy.description" hidden name="description">
-                    <input type="text" value="@toy.price" hidden name="price">
-                    
-                   
-                     <input type="submit" value="В корзину" />
-                }
-            </div>*@
-            </div></div>
-          }
-</div>
 
 
 @*<div style="text-align:center">
@@ -164,14 +120,21 @@ updateCartTotal();
 document.getElementById("emptycart").addEventListener("click", emptyCart);
 var btns = document.getElementsByClassName('addtocart');
 for (var i = 0; i < btns.length; i++) {
-    btns[i].addEventListener('click', function() {addToCart(this);});
+    btns[i].addEventListener('click', function() {addToCart(this);
+        document.getElementById('form').submit();      
+    });
 }
 
-/* ADD TO CART functions */
-
-function addToCart(elem) {
-   
-    //init
+function removeSession(){
+$.ajax({
+      url: '/Order/RemoveSession',
+      method: 'POST',
+      data: { }
+   }).done(function() {
+      console.log('cleraed'); 
+   });
+}
+function addToCart(elem) {   
     var sibs = [];
     var getprice;
     var getproductName;
@@ -231,8 +194,7 @@ function updateCartTotal(){
             total += price;
         }     
     }
-    document.getElementById("total").innerHTML = total.toFixed(2);
-    document.getElementById("carttable").innerHTML = carttable;
+    document.getElementById("total").innerHTML = total;
     document.getElementById("itemsquantity").innerHTML = items;
 }
 //user feedback on successful add
@@ -251,6 +213,7 @@ function emptyCart() {
     if(sessionStorage.getItem('cart')){
         sessionStorage.removeItem('cart');
         updateCartTotal();
+        removeSession();
       //clear message and remove class style
       var alerts = document.getElementById("alerts");
       alerts.innerHTML = "";
