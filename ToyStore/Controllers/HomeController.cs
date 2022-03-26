@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq;
 using ToyStore.Models;
 using ToyStore.SessionExtension;
 using ToyStore.ViewsModel;
@@ -29,7 +30,8 @@ namespace ToyStore.Controllers
         {
            
             ViewBag.currentId="";
-            ViewBag.category = model.Searching(db);
+            var category = model.Searching(db);
+            ViewBag.category =category;
             var toysModel = db.toys
                 .Select(x => new Toys {Id =x.Id,toy_name = x.toy_name,price=x.price, description= x.description })
                 .ToList();
@@ -45,12 +47,26 @@ namespace ToyStore.Controllers
 
             var toysModel = db.toys
                 .Where(x => x.Id == toyId)
-                .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name,price=x.price, description = x.description})
+                .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name,price=x.price,summa=x.summa, description = x.description})
                 .ToList();
            
             IndexViewModel toys = new IndexViewModel { Toys = toysModel };
-            HttpContext.Session.SetObjectAsJson("ToyNames", toys);
 
+            
+            var cart = HttpContext.Session.GetObjectFromJson<IndexViewModel>("ToyNames");
+            if (cart != null)
+            {
+                var newl = cart.Toys.ToList().Concat(toysModel);
+
+                HttpContext.Session.Remove("ToyNames");
+                IndexViewModel toysNew = new IndexViewModel { Toys = newl };
+              
+                HttpContext.Session.SetObjectAsJson("ToyNames", toysNew);
+
+                return RedirectToAction("Index");
+            }
+
+            HttpContext.Session.SetObjectAsJson("ToyNames", toys);
             return RedirectToAction("Index");
         }
 
