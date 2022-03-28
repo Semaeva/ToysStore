@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ToyStore.Models;
 using ToyStore.SessionExtension;
@@ -19,18 +20,62 @@ namespace ToyStore.Controllers
         public ActionResult Index(int idUser, int idToys)
         {
             ViewBag.category = model.Searching(db);
-                 var cart = HttpContext.Session.GetObjectFromJson<IndexViewModel>("ToyNames");
-            if(cart == null)
-            {
-                ViewBag.err = "Корзина пуста";
-            }
-                return View(cart);
-       
-                
+         
+            List<SelectListItem> itemsCart = CartList();
+            return View(itemsCart);        
         }
 
 
-      
+        [HttpPost]
+        public IActionResult Index(string[] carts)
+        {
+            ViewBag.category = model.Searching(db);
+            int newList = 0;
+            var cart = HttpContext.Session.GetObjectFromJson<IndexViewModel>("ToyNames").Toys.ToList();
+            foreach (var c in carts) {
+
+                cart.RemoveAll(r => r.Id == Int32.Parse(c));
+                
+            }
+            IndexViewModel toys = new IndexViewModel { Toys = cart };
+
+            HttpContext.Session.Remove("ToyNames");
+            HttpContext.Session.SetObjectAsJson("ToyNames", toys);
+
+            List<SelectListItem> items = CartList();
+         
+            return View(items);
+        }
+
+        private  List<SelectListItem> CartList( ) {
+            var cart = HttpContext.Session.GetObjectFromJson<IndexViewModel>("ToyNames");
+          var test = cart.Toys.ToList();
+            ViewBag.cart = cart.Toys.ToList();
+            //list item
+            List<SelectListItem> items = new List<SelectListItem>();
+            foreach (var item in cart.Toys)
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = item.toy_name,
+                    Value = item.Id.ToString() 
+                });
+            }
+            return items;
+        }
+
+
+        [HttpPost]
+        public ActionResult RemoveItems(int idUser, int idToys, bool IsRemoved)
+        {
+            ViewBag.category = model.Searching(db);
+            var cart = HttpContext.Session.GetObjectFromJson<IndexViewModel>("ToyNames").Toys.ToList();
+            var itemToRemove = cart.Single(r => r.Id == idToys);
+
+            var newCart = cart.Remove(itemToRemove);
+            return View(newCart);
+        }
+
 
         // GET: OrderController/Details/5
         public ActionResult Details(int id)
@@ -40,7 +85,7 @@ namespace ToyStore.Controllers
 
         // GET: OrderController/Create
         [HttpPost]
-        public ActionResult Create(int toyId, int userId)
+        public ActionResult Create(int toyId, int userId, bool isRemoved)
         {
             userId = ViewBag.currentId;
             return View();
