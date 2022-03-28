@@ -1,25 +1,129 @@
 ﻿@using ToyStore.ViewsModel;
-@model IndexViewModel
-
+@using ToyStore.Models;
+ @model   List<SelectListItem>;
 @{
 }
 
 @if (Model != null)
 {
-    @foreach (Toys toy in Model.Toys)
+    @foreach (Toys cart in (List<Toys>)ViewBag.cart)
     {
-        @toy.toy_name <br>
-        @toy.description <br>
-        @toy.price <br>
-           @toy.summa <br>
-        @* @toy.quantity <br>*@
+        <div class="gridCart">
+  <div class="grid-item-cart">
+      @cart.toy_name <br />
+      <div class="grid-item-cart desc">@cart.description</div>
+      <div class="grid-item-cart price">@cart.price</div> 
+  </div>
+            <div class="grid-item-cart">
+            @*@using (@Html.BeginForm("Create", "Order", new { }, FormMethod.Post))
+            {*@
+            <input type="number" name="quantity" value=1 min="1" max="10" class ="numberCart"> 
+            @*  }*@
+             </div>
+    <div class="grid-item-cart newPrice">@cart.price</div> 
+  
+    </div>
+        <p>@cart.toy_name</p>   
     }
-    @using (@Html.BeginForm("Create", "Order", new { }, FormMethod.Post))
-    {
-        <label for="quantity">Количество:</label>
-        <input type="number" name="quantity" value=1 min="1" max="10">
-    }
+
+        <form method="post" asp-controller="Order" asp-action="Index">
+
+            <table>
+                <tr>
+                    @* <td>Товар</td>
+                        <td>Описание</td>
+                        <td>Цена</td>
+                        <td>Сумма</td>
+                        <td>Количество</td>
+                        <td>Выбрать</td>*@
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @* <td>@item.toy_name</td>
+                            <td>@item.description</td>
+                            <td>@item.price</td>
+                            <td>@item.summa</td>*@
+                        <td>
+                            <label for="@item.Value">@item.Text</label>
+                        </td>
+                        <td>
+
+                            <input id="@item.Value" type="checkbox" name="carts" value="@item.Value" checked="@item.Selected"/>
+                        </td>
+
+                    </tr>
+                }
+            </table>
+            <input type="submit" value="Submit"/>
+
+        </form>
+
+        @*   @using (@Html.BeginForm("Create", "Order", new { }, FormMethod.Post))
+            {
+            <td><input type="number" name="quantity" value=1 min="1" max="10"></td>
+            }
+
+            @using (@Html.BeginForm("RemoveItems", "Order", new { }, FormMethod.Post))
+            {
+            <label>Удалить:</label><br />
+            <input type="checkbox" name="isRemoved" value="true" />
+            <input type="submit" value="remove">
+            }*@
+    
 }
 else
 {
 <p>empty</p>}
+
+
+<style>
+.gridCart{
+    display: grid;
+  grid-template-columns: 60vw 15vw auto;
+  background-color: #2196F3;
+  padding: 10px;
+}
+
+.grid-item-cart {
+ background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 15px;
+  text-align: center;
+}
+.desc {
+    font-size: 25px;
+}
+price{
+    font-size:12px;
+}
+</style>
+
+<script>
+
+//        var btns = document.getElementsByClassName('numberCart');
+//for (var i = 0; i < btns.length; i++) {
+//    btns[i].addEventListener('click', function() {countPrice(this);
+//        //document.getElementById ('sbm').click();
+//    });
+//}
+
+    const inputs = document.getElementsByClassName('numberCart');
+for(let i=0; i< inputs.length; i++){
+  inputs[i].addEventListener('change', countPrice) // для инпута можно вызвать слушатель "change", функция будет срабатывать каждый раз при изменении.
+  }
+
+
+function countPrice(event){ // если не передавать в функцию ничего, по умолчанию можно вытащить такую фишку как event (назвать ее можно как угодно, чаще пишут сокращенно просто 'е')
+    console.dir(event.target); // у event всегда есть event.target - тот html блок, который был в цели при срабатывании функции, в нашем случае это input
+    
+    // console.dir вместо console.log показывает элемент в виде объекта, 
+    // где к каждому ключу можно будет обратиться.
+    // в нашем случае инпут находится в диве, а следом за этим дивом идёт тот, который нам нужно поменять.
+  
+    const divOfPrice = event.target.parentElement.nextElementSibling; //здесь мы с помощью parentElement обратились к диву, в котором находится инпут, а с помощью nextElementSibling перешли на следующий див.
+    divOfPrice.innerText =  Number(divOfPrice.innerText)*Number(event.target.value) //все value приходят изначально в виде строчки, поэтому мы преобразовываем их в number, чтобы проблем с умножением точно не было.
+        console.log(event.target.value);
+}
+</script>
