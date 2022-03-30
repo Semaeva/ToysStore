@@ -27,7 +27,7 @@ namespace ToyStore.Controllers
         }
 
        
-      [Authorize]
+            [Authorize]
             public IActionResult Index()
         {
             var category = model.Searching(db);
