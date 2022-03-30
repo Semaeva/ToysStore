@@ -7,7 +7,13 @@ namespace ToyStore.ViewsModel
         public IEnumerable<Toys> Toys { get; set; }
         public IEnumerable<Category> categories { get; set; }
 
+        //ApplicationContext db;
 
+        //public IndexViewModel(ApplicationContext context)
+        //{
+        //    db = context;
+
+        //}
 
         public IndexViewModel Searching(ApplicationContext db)
         {
