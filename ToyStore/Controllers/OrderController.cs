@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ namespace ToyStore.Controllers
         public OrderController(ApplicationContext context) {
             db = context;
         }
+
+        [Authorize]
         // GET: OrderController
         public ActionResult Index(int idUser, int idToys)
         {
@@ -51,6 +54,7 @@ namespace ToyStore.Controllers
             var cart = HttpContext.Session.GetObjectFromJson<IndexViewModel>("ToyNames");
           var test = cart.Toys.ToList();
             ViewBag.cart = cart.Toys.ToList();
+
             //list item
             List<SelectListItem> items = new List<SelectListItem>();
             foreach (var item in cart.Toys)

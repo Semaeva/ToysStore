@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -25,21 +26,21 @@ namespace ToyStore.Controllers
             db = context;
         }
 
-   
-        public IActionResult Index(int? categoryId)
+       
+            [Authorize]
+            public IActionResult Index()
         {
-           
-            ViewBag.currentId="";
             var category = model.Searching(db);
-            ViewBag.category =category;
+            ViewBag.category = category;
             var toysModel = db.toys
-                .Select(x => new Toys {Id =x.Id,toy_name = x.toy_name,price=x.price, description= x.description })
+                .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name, price = x.price, description = x.description })
                 .ToList();
-                IndexViewModel toys = new IndexViewModel { Toys = toysModel };
+            IndexViewModel toys = new IndexViewModel { Toys = toysModel };
 
             return View(toys);
         }
 
+       
         [HttpPost]
         public IActionResult Index(int toyId)
         {

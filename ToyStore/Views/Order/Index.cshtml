@@ -5,45 +5,43 @@
 }
 
 @if (Model != null)
-{
+{        
+    <div class="total">Общая сумма
+    <div id="summa">0</div> 
+    </div>
     @foreach (Toys cart in (List<Toys>)ViewBag.cart)
     {
-        <div class="gridCart">
-  <div class="grid-item-cart">
+       
+
+      <div class="gridCart">
+
+      <div class="grid-item-cart toy_name">
       @cart.toy_name <br />
       <div class="grid-item-cart desc">@cart.description</div>
       <div class="grid-item-cart price">@cart.price</div> 
+
   </div>
             <div class="grid-item-cart">
-            @*@using (@Html.BeginForm("Create", "Order", new { }, FormMethod.Post))
-            {*@
+           
             <input type="number" name="quantity" value=1 min="1" max="10" class ="numberCart"> 
-            @*  }*@
+           
              </div>
     <div class="grid-item-cart newPrice">@cart.price</div> 
-  
+
+
     </div>
         <p>@cart.toy_name</p>   
     }
-
         <form method="post" asp-controller="Order" asp-action="Index">
 
             <table>
                 <tr>
-                    @* <td>Товар</td>
-                        <td>Описание</td>
-                        <td>Цена</td>
-                        <td>Сумма</td>
-                        <td>Количество</td>
-                        <td>Выбрать</td>*@
+
                 </tr>
                 @foreach (var item in Model)
                 {
                     <tr>
-                        @* <td>@item.toy_name</td>
-                            <td>@item.description</td>
-                            <td>@item.price</td>
-                            <td>@item.summa</td>*@
+                     
                         <td>
                             <label for="@item.Value">@item.Text</label>
                         </td>
@@ -59,17 +57,6 @@
 
         </form>
 
-        @*   @using (@Html.BeginForm("Create", "Order", new { }, FormMethod.Post))
-            {
-            <td><input type="number" name="quantity" value=1 min="1" max="10"></td>
-            }
-
-            @using (@Html.BeginForm("RemoveItems", "Order", new { }, FormMethod.Post))
-            {
-            <label>Удалить:</label><br />
-            <input type="checkbox" name="isRemoved" value="true" />
-            <input type="submit" value="remove">
-            }*@
     
 }
 else
@@ -79,7 +66,7 @@ else
 
 <style>
 .gridCart{
-    display: grid;
+  display: grid;
   grid-template-columns: 60vw 15vw auto;
   background-color: #2196F3;
   padding: 10px;
@@ -93,31 +80,33 @@ else
   text-align: center;
 }
 .desc {
-    font-size: 25px;
+    font-size: 12px;
 }
-price{
+.price{
     font-size:12px;
 }
+.toy_name{    font-size: 25px;
+}
+#summa{
+    grid-area:menu;
+}
+.total{text-align:right;}
 </style>
 
 <script>
 
-//        var btns = document.getElementsByClassName('numberCart');
-//for (var i = 0; i < btns.length; i++) {
-//    btns[i].addEventListener('click', function() {countPrice(this);
-//        //document.getElementById ('sbm').click();
-//    });
-//}
 
     const inputs = document.getElementsByClassName('numberCart');
 for(let i=0; i< inputs.length; i++){
-  inputs[i].addEventListener('change', countPrice) // для инпута можно вызвать слушатель "change", функция будет срабатывать каждый раз при изменении.
-  }
+  inputs[i].addEventListener('change', countPrice); // для инпута можно вызвать слушатель "change", функция будет срабатывать каждый раз при изменении.
+  
+ inputs[i].addEventListener('change', totalSum)
+}
     
   let previous_value=1;
 
 function countPrice(event){ // если не передавать в функцию ничего, по умолчанию можно вытащить такую фишку как event (назвать ее можно как угодно, чаще пишут сокращенно просто 'е')
-    console.dir(event.target); // у event всегда есть event.target - тот html блок, который был в цели при срабатывании функции, в нашем случае это input
+   // console.dir(event.target); // у event всегда есть event.target - тот html блок, который был в цели при срабатывании функции, в нашем случае это input
     
     // console.dir вместо console.log показывает элемент в виде объекта, 
     // где к каждому ключу можно будет обратиться.
@@ -127,7 +116,6 @@ function countPrice(event){ // если не передавать в функц�
           if (previous_value >= value) {
             const divOfPrice = event.target.parentElement.nextElementSibling; //здесь мы с помощью parentElement обратились к диву, в котором находится инпут, а с помощью nextElementSibling перешли на следующий див.
             divOfPrice.innerText =  Number(divOfPrice.innerText)/Number(previous_value); //все value приходят изначально в виде строчки, поэтому мы преобразовываем их в number, чтобы проблем с умножением точно не было.
-           console.log(divOfPrice.innerText +'decrease');         
           } 
 
           if (previous_value < value) {
@@ -135,5 +123,19 @@ function countPrice(event){ // если не передавать в функц�
             divOfPrice.innerText =  Number(divOfPrice.innerText)*Number(event.target.value);
           }
              previous_value = value;
+
+};
+
+document.addEventListener("DOMContentLoaded", function(){
+totalSum();
+
+});
+function totalSum(){
+    let sum=0;
+    var total= document.getElementsByClassName("newPrice");
+      for (var i=0; i < total.length; i++) {
+          sum= sum+Number(total[i].innerHTML);
+          document.getElementById('summa').innerHTML =sum;
+                }
 }
 </script>
