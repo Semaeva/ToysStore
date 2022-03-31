@@ -30,6 +30,7 @@ namespace ToyStore.Controllers
             [Authorize]
             public IActionResult Index()
         {
+
             var category = model.Searching(db);
             ViewBag.category = category;
             var toysModel = db.toys
