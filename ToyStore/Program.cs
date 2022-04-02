@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ToyStore.Models;
 using ToyStore.ViewsModel;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
@@ -18,11 +20,33 @@ builder.Services.AddSession(options =>
 });
 string mySqlConnectionStr = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContextPool<ApplicationContext>(options => options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => //CookieAuthenticationOptions
-                {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                });
+
+builder.Services.AddIdentity<User, IdentityRole>(
+    opts =>
+    {
+        opts.Password.RequiredLength = 5;   // минимальная длина
+        opts.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
+        opts.Password.RequireLowercase = false; // требуются ли символы в нижнем регистре
+        opts.Password.RequireUppercase = false; // требуются ли символы в верхнем регистре
+        opts.Password.RequireDigit = false; // требуются ли цифры
+    })
+                .AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication()
+    //v => {
+    //    v.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+    //    v.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    //})
+        .AddGoogle(googleOptions =>
+        {
+            googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
+            googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+        });
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//                .AddCookie(options => //CookieAuthenticationOptions
+//                {
+//                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+//                });
 //builder.Services.AddSingleton<IndexViewModel>();
 
 var app = builder.Build();
