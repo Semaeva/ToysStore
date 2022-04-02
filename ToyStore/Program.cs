@@ -33,21 +33,12 @@ builder.Services.AddIdentity<User, IdentityRole>(
                 .AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication()
-    //v => {
-    //    v.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
-    //    v.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-    //})
         .AddGoogle(googleOptions =>
         {
             googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
             googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
         });
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//                .AddCookie(options => //CookieAuthenticationOptions
-//                {
-//                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-//                });
-//builder.Services.AddSingleton<IndexViewModel>();
+
 
 var app = builder.Build();
 
