@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Authentication;
+using System.ComponentModel.DataAnnotations;
 
 namespace ToyStore.ViewsModel
 {
@@ -17,5 +18,8 @@ namespace ToyStore.ViewsModel
         public bool RememberMe { get; set; }
 
         public string ReturnUrl { get; set; }
+
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
     }
 }
