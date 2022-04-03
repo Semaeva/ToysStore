@@ -45,3 +45,11 @@ E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\out\appsettings.Devel
 E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\out\appsettings.json
 E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\out\ToyStore.deps.json
 E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\out\ToyStore.runtimeconfig.json
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\MailKit.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\MimeKit.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\BouncyCastle.Crypto.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Google.Apis.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Google.Apis.Auth.PlatformServices.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Google.Apis.Auth.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Google.Apis.Core.dll
+E:\c# trainig\ToyStore\ToysStore\ToyStore\bin\Debug\net6.0\Google.Apis.Gmail.v1.dll
