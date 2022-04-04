@@ -32,7 +32,7 @@
 <div class="col-md-6">
         <hr />
         @{
-                           <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+                    <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
                     <div>
                         @foreach (var provider in Model.ExternalLogins)
                         {

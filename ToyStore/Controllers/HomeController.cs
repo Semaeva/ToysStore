@@ -11,6 +11,8 @@ using ToyStore.ViewsModel;
 
 namespace ToyStore.Controllers
 {
+    [Authorize]
+
     public class HomeController : Controller
     {
 
@@ -26,12 +28,15 @@ namespace ToyStore.Controllers
             db = context;
         }
 
-       
-            [Authorize]
-        //[Route("secret")]
+
+        [AllowAnonymous]
         public IActionResult Index()
         {
-
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Content("не аутентифицирован");
+            }
+            var cur = User.Identity.Name;
             var category = model.Searching(db);
             ViewBag.category = category;
             var toysModel = db.toys

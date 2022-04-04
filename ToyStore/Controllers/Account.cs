@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using ToyStore.EmailServices;
 using ToyStore.Models;
 using ToyStore.ViewsModel;
@@ -183,39 +184,64 @@ namespace ToyStore.Controllers
 
                 // If we cannot find the user email we cannot continue
                 ViewBag.ErrorTitle = $"Email claim not received from: {info.LoginProvider}";
-                ViewBag.ErrorMessage = "Please contact support on Pragim@PragimTech.com";
+                ViewBag.ErrorMessage = "Please contact support on ";
 
                 return View("Error");
             }
         }
+
+
+      //  [HttpPost]
+        public async Task<IActionResult> LogOff()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model, string returnUrl)
+        public async Task<IActionResult> Login(LoginModel model, string returnUrl=null)
+        
         {
-            if (ModelState.IsValid)
+            string pattern = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
+
+            if (model.ExternalLogins==null)
             {
-                var user = await _userManager.FindByNameAsync(model.Email);
-                if (user != null)
+                if (Regex.IsMatch(model.Email, pattern, RegexOptions.IgnoreCase))
                 {
-                    // проверяем, подтвержден ли email
-                    if (!await _userManager.IsEmailConfirmedAsync(user))
+                    var user = await _userManager.FindByNameAsync(model.Email);
+                    if (user != null)
                     {
-                        ModelState.AddModelError(string.Empty, "Вы не подтвердили свой email");
-                        return View(model);
+                        // проверяем, подтвержден ли email
+                        if (!await _userManager.IsEmailConfirmedAsync(user))
+                        {
+                            ModelState.AddModelError(string.Empty, "Вы не подтвердили свой email");
+                            return View(model);
+                        }
+                    }
+
+                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                    if (result.Succeeded)
+                    {
+                        // проверяем, принадлежит ли URL приложению
+                        if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                        {
+                            return Redirect(model.ReturnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Неправильный логин и (или) пароль");
                     }
                 }
-
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
-                }
             }
-            ViewBag.ErrorMessage = "Email not found or matched";
+            ViewBag.ErrorMessage = "Email не найден";
 
             LoginModel model_ = new LoginModel
             {
@@ -225,24 +251,15 @@ namespace ToyStore.Controllers
             return View(model_);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
-        {
-            // удаляем аутентификационные куки
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
+     //   //[HttpPost]
+     ////   [ValidateAntiForgeryToken]
+     //   public async Task<IActionResult> LogOff()
+     //   {
+     //       return RedirectToAction("Login", "Account");            // удаляем аутентификационные куки
+     //       //await _signInManager.SignOutAsync();
+     //       //return RedirectToAction("Login", "Account");
+     //   }
 
-        //[AllowAnonymous]
-        //public IActionResult GoogleLogin()
-        //{
-        //    string redirectUrl = Url.Action("GoogleResponse", "Account");
-        //    var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
-        //    return new ChallengeResult("Google", properties);
-        //}
 
-      
-        
     }
 }
