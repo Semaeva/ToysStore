@@ -23,7 +23,29 @@
     </div>
     <div>
         <input type="submit" value="Войти" />
-            <a class="btn btn-info" asp-action="GoogleLogin">Log In With Google</a>
 
     </div>
 </form>
+
+<p>@ViewBag.ErrorMessage</p>
+
+<div class="col-md-6">
+        <hr />
+        @{
+                    <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+                    <div>
+                        @foreach (var provider in Model.ExternalLogins)
+                        {
+                            <button type="submit" class="btn btn-primary" style="width:auto"
+                                    name="provider" value="@provider.Name"
+                                    title="Login using your @provider.DisplayName account">
+                                @provider.DisplayName
+                            </button>
+                        }
+                    </div>
+                </form>
+            }
+        
+        
+    </div>
+    
