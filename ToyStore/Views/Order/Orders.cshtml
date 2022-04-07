@@ -9,7 +9,6 @@
         <th>@Html.DisplayNameFor(m=>m.description)</th>
         <th>@Html.DisplayNameFor(m=>m.toy_name)</th>
         <th>@Html.DisplayNameFor(m=>m.price)</th>
-        <th>@Html.DisplayNameFor(m=>m.summa)</th>      
     </tr>
     </thead>
       <tbody>
@@ -19,11 +18,10 @@
                         @foreach(var user in item.user){
                             @foreach (var categ in user.toy)
                             {
-                        <td>@Html.DisplayFor(modelItem => user.email)</td>
+                        <td>@Html.DisplayFor(modelItem => user.Email)</td>
                         <td>@Html.DisplayFor(modelItem => item.description)</td>
                         <td>@Html.DisplayFor(modelItem => item.toy_name)</td>
                         <td>@Html.DisplayFor(modelItem => item.price)</td>
-                        <td>@Html.DisplayFor(modelItem => item.summa)</td>
                         }
                         }
                        

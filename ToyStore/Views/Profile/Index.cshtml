@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ToyStore.Models.User>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+<table class="table">
+    <tr><th>Email</th><th>ФИО</th><th>Телефон</th><th>Город</th><th>УЛица</th><th>Дом</th></tr>
+    @foreach (var prof in Model)
+    {
+        <tr>
+            <td>@prof.Email</td>
+            <td>@prof.UserName</td>
+            <td>@prof.PhoneNumber</td>
+            <td>@prof.City</td>
+            <td>@prof.Street</td>
+            <td>@prof.House</td>
+           @* <td>
+                <form asp-action="Delete" asp-route-id="@prof.Id" method="post">
+                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@prof.Id">Изменить</a>
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Удалить
+                    </button>
+                </form>
+            </td>*@
+        </tr>
+    }
+</table>

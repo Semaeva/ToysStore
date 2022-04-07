@@ -7,6 +7,8 @@ namespace ToyStore.ViewsModel
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        [Display(Name = "ФИО")]
+        public string UserName { get; set; }
 
 
         [DataType(DataType.Password)]

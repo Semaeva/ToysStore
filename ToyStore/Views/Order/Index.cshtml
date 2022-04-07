@@ -1,8 +1,6 @@
 ﻿@using ToyStore.ViewsModel;
 @using ToyStore.Models;
  @model   List<SelectListItem>;
-@{
-}
 
 @if (Model != null)
 {        
@@ -11,7 +9,6 @@
     </div>
     @foreach (Toys cart in (List<Toys>)ViewBag.cart)
     {
-       
 
       <div class="gridCart">
 
@@ -21,15 +18,34 @@
       <div class="grid-item-cart price">@cart.price</div> 
 
   </div>
-            <div class="grid-item-cart">
-           
+            <div class="grid-item-cart"> 
             <input type="number" name="quantity" value=1 min="1" max="10" class ="numberCart"> 
            
              </div>
     <div class="grid-item-cart newPrice">@cart.price</div> 
 
+               <form method="post" asp-controller="Order" asp-route-toys="@cart.toy_name" asp-route-toyId="@cart.Id" asp-action="SendEmail">
 
+         <div id="order">
+        <h3>Ваши данные</h3>
+        
+        <p>ФИО <input type="text" name="name" value="@ViewBag.name"><br></p>
+        <p>E-mail <input type="text" name="email" value="@ViewBag.email"><br></p>
+        <p>Телефон<input type="text" name="phone" value ="@ViewBag.phone"><br></p>
+            <h4>Адрес</h4> <br>
+        <p>Город<input type="text" name ="city" value ="@ViewBag.city"><br></p>
+        <p>Район<input type="text" name="area" value ="@ViewBag.area"><br></p>
+        <p>Улица<input type="text" name="street" value ="@ViewBag.street"><br></p>
+        <p>Дом<input type="text" name="house" value ="@ViewBag.house"><br></p>
+        <input type="text" name="userId" value="@ViewBag.userId" hidden>
+        <input type="text" name="quantity" id="quant" value="1">
     </div>
+                <input  type="submit"  value="Оформить заказ"/>
+                </form>
+    </div>
+
+ 
+
         <p>@cart.toy_name</p>   
     }
         <form method="post" asp-controller="Order" asp-action="Index">
@@ -53,7 +69,7 @@
                     </tr>
                 }
             </table>
-            <input type="submit" value="Submit"/>
+            <input type="submit" value="удалить"/>
 
         </form>
 
@@ -93,28 +109,25 @@ else
 .total{text-align:right;}
 </style>
 
-<script>
-
-
+<script>   
     const inputs = document.getElementsByClassName('numberCart');
-for(let i=0; i< inputs.length; i++){
-  inputs[i].addEventListener('change', countPrice); // для инпута можно вызвать слушатель "change", функция будет срабатывать каждый раз при изменении.
-  
- inputs[i].addEventListener('change', totalSum)
-}
+
+    for(let i=0; i< inputs.length; i++){
+    inputs[i].addEventListener('change', countPrice); // для инпута можно вызвать слушатель "change", функция будет срабатывать каждый раз при изменении.
+    inputs[i].addEventListener('change', totalSum);
+    inputs[i].addEventListener('change', getNumber); 
+    }
+            function getNumber(event){
+                  var  value =event.target.value;
+                  document.getElementById("quant").value = value;
+                }
     
   let previous_value=1;
 
-function countPrice(event){ // если не передавать в функцию ничего, по умолчанию можно вытащить такую фишку как event (назвать ее можно как угодно, чаще пишут сокращенно просто 'е')
-   // console.dir(event.target); // у event всегда есть event.target - тот html блок, который был в цели при срабатывании функции, в нашем случае это input
-    
-    // console.dir вместо console.log показывает элемент в виде объекта, 
-    // где к каждому ключу можно будет обратиться.
-    // в нашем случае инпут находится в диве, а следом за этим дивом идёт тот, который нам нужно поменять.
-
+function countPrice(event){
           var  value =event.target.value;
           if (previous_value >= value) {
-            const divOfPrice = event.target.parentElement.nextElementSibling; //здесь мы с помощью parentElement обратились к диву, в котором находится инпут, а с помощью nextElementSibling перешли на следующий див.
+            const divOfPrice = event.target.parentElement.nextElementSibling; //с помощью parentElement обратились к диву, в котором находится инпут, а с помощью nextElementSibling перешли на следующий див.
             divOfPrice.innerText =  Number(divOfPrice.innerText)/Number(previous_value); //все value приходят изначально в виде строчки, поэтому мы преобразовываем их в number, чтобы проблем с умножением точно не было.
           } 
 

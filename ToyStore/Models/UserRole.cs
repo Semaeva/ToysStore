@@ -6,10 +6,10 @@
         public int Id { get; set; }
         public string name { get; set; }
 
-        public ICollection<Users> Users { get; set; }
+        public ICollection<User> Users { get; set; }
         public UserRole()
         {
-            Users = new List<Users>();
+            Users = new List<User>();
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using ToyStore.Models;
 using ToyStore.SessionExtension;
 using ToyStore.ViewsModel;
@@ -32,11 +33,12 @@ namespace ToyStore.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return Content("не аутентифицирован");
-            }
-            var cur = User.Identity.Name;
+            //var userId = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Email);
+            //var profile = db.Users.Find(userId).Area;
+            //if (profile == String.Empty)
+            //{
+            //    return RedirectToAction("Create", "Profile");
+            //}
             var category = model.Searching(db);
             ViewBag.category = category;
             var toysModel = db.toys
@@ -55,7 +57,7 @@ namespace ToyStore.Controllers
 
             var toysModel = db.toys
                 .Where(x => x.Id == toyId)
-                .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name,price=x.price,summa=x.summa, description = x.description})
+                .Select(x => new Toys { Id = x.Id, toy_name = x.toy_name,price=x.price, description = x.description})
                 .ToList();
            
             IndexViewModel toys = new IndexViewModel { Toys = toysModel };

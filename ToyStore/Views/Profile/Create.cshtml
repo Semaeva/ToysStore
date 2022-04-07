@@ -1,0 +1,36 @@
+﻿@model ToyStore.Models.User
+@{
+    Layout = null;
+}
+
+<h3>Заполните форму</h3>
+
+ <form asp-action="Create" asp-controller="Profile"  method="post">
+
+   <div asp-validation-summary="ModelOnly"></div>
+
+  
+    <div>
+        <label asp-for="PhoneNumber"></label><br />
+        <input asp-for="PhoneNumber" />
+        <span asp-validation-for="PhoneNumber"></span>
+    </div>
+    <div>
+        <label asp-for="City"></label><br />
+        <input asp-for="City" />
+        <span asp-validation-for="City"></span>
+    </div>  
+    <div>
+        <label asp-for="Street"></label><br />
+        <input asp-for="Street" />
+        <span asp-validation-for="Street"></span>
+    </div> 
+    <div>
+        <label asp-for="House"></label><br />
+        <input asp-for="House" />
+        <span asp-validation-for="House"></span>
+    </div>
+    <div>
+        <input type="submit" value="Заполнить" />
+    </div>
+                </form>

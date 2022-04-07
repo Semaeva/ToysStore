@@ -10,7 +10,11 @@
         <input asp-for="Email" />
         <span asp-validation-for="Email"></span>
     </div>
-  
+   <div>
+        <label asp-for="UserName"></label><br />
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
     <div>
         <label asp-for="Password"></label><br />
         <input asp-for="Password" />
@@ -21,6 +25,7 @@
         <input asp-for="PasswordConfirm" />
         <span asp-validation-for="PasswordConfirm"></span>
     </div>
+    
     <div>
         <input type="submit" value="Регистрация" />
     </div>

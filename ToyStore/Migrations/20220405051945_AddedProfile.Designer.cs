@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToyStore.Models;
 
@@ -10,9 +11,10 @@ using ToyStore.Models;
 namespace ToyStore.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20220405051945_AddedProfile")]
+    partial class AddedProfile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,6 +164,37 @@ namespace ToyStore.Migrations
                     b.ToTable("categories");
                 });
 
+            modelBuilder.Entity("ToyStore.Models.Profile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("House")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("profiles");
+                });
+
             modelBuilder.Entity("ToyStore.Models.Toys", b =>
                 {
                     b.Property<int>("Id")
@@ -176,6 +209,9 @@ namespace ToyStore.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<float>("price")
+                        .HasColumnType("float");
+
+                    b.Property<float>("summa")
                         .HasColumnType("float");
 
                     b.Property<string>("toy_name")
@@ -197,12 +233,6 @@ namespace ToyStore.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Area")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("City")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
@@ -213,10 +243,6 @@ namespace ToyStore.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("House")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -235,9 +261,6 @@ namespace ToyStore.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext");
 
@@ -247,15 +270,15 @@ namespace ToyStore.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Street")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
+
+                    b.Property<int?>("profileID")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -265,6 +288,8 @@ namespace ToyStore.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("profileID");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -284,31 +309,77 @@ namespace ToyStore.Migrations
                     b.Property<int?>("userId")
                         .HasColumnType("int");
 
-                    b.Property<string>("userId1")
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("id");
 
                     b.HasIndex("toyID");
 
-                    b.HasIndex("userId1");
+                    b.HasIndex("userId");
 
                     b.ToTable("userOrder");
                 });
 
-            modelBuilder.Entity("ToysUser", b =>
+            modelBuilder.Entity("ToyStore.Models.UserRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserRole");
+                });
+
+            modelBuilder.Entity("ToyStore.Models.Users", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("passw")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ToysUsers", b =>
                 {
                     b.Property<int>("toyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("userId")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("userid")
+                        .HasColumnType("int");
 
-                    b.HasKey("toyId", "userId");
+                    b.HasKey("toyId", "userid");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("userid");
 
-                    b.ToTable("ToysUser");
+                    b.ToTable("ToysUsers");
+                });
+
+            modelBuilder.Entity("UserRoleUsers", b =>
+                {
+                    b.Property<int>("Usersid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("userRolesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Usersid", "userRolesId");
+
+                    b.HasIndex("userRolesId");
+
+                    b.ToTable("UserRoleUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -371,22 +442,31 @@ namespace ToyStore.Migrations
                     b.Navigation("category");
                 });
 
+            modelBuilder.Entity("ToyStore.Models.User", b =>
+                {
+                    b.HasOne("ToyStore.Models.Profile", "profile")
+                        .WithMany("users")
+                        .HasForeignKey("profileID");
+
+                    b.Navigation("profile");
+                });
+
             modelBuilder.Entity("ToyStore.Models.userOrder", b =>
                 {
                     b.HasOne("ToyStore.Models.Toys", "toy")
                         .WithMany("userOrders")
                         .HasForeignKey("toyID");
 
-                    b.HasOne("ToyStore.Models.User", "user")
+                    b.HasOne("ToyStore.Models.Users", "user")
                         .WithMany("userOrders")
-                        .HasForeignKey("userId1");
+                        .HasForeignKey("userId");
 
                     b.Navigation("toy");
 
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("ToysUser", b =>
+            modelBuilder.Entity("ToysUsers", b =>
                 {
                     b.HasOne("ToyStore.Models.Toys", null)
                         .WithMany()
@@ -394,9 +474,24 @@ namespace ToyStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ToyStore.Models.User", null)
+                    b.HasOne("ToyStore.Models.Users", null)
                         .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("userid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserRoleUsers", b =>
+                {
+                    b.HasOne("ToyStore.Models.Users", null)
+                        .WithMany()
+                        .HasForeignKey("Usersid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ToyStore.Models.UserRole", null)
+                        .WithMany()
+                        .HasForeignKey("userRolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -406,12 +501,17 @@ namespace ToyStore.Migrations
                     b.Navigation("toys");
                 });
 
+            modelBuilder.Entity("ToyStore.Models.Profile", b =>
+                {
+                    b.Navigation("users");
+                });
+
             modelBuilder.Entity("ToyStore.Models.Toys", b =>
                 {
                     b.Navigation("userOrders");
                 });
 
-            modelBuilder.Entity("ToyStore.Models.User", b =>
+            modelBuilder.Entity("ToyStore.Models.Users", b =>
                 {
                     b.Navigation("userOrders");
                 });
