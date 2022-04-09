@@ -189,6 +189,36 @@ namespace ToyStore.Migrations
                     b.ToTable("toys");
                 });
 
+            modelBuilder.Entity("ToyStore.Models.toysusers", b =>
+                {
+                    b.Property<int?>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("comment")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("toysID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("userId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("usersId")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("toysID");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("toysusers");
+                });
+
             modelBuilder.Entity("ToyStore.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -269,44 +299,17 @@ namespace ToyStore.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("ToyStore.Models.userOrder", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("toyID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("userId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("userId1")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("toyID");
-
-                    b.HasIndex("userId1");
-
-                    b.ToTable("userOrder");
-                });
-
             modelBuilder.Entity("ToysUser", b =>
                 {
-                    b.Property<int>("toyId")
+                    b.Property<int>("toysId")
                         .HasColumnType("int");
 
-                    b.Property<string>("userId")
+                    b.Property<string>("usersId")
                         .HasColumnType("varchar(255)");
 
-                    b.HasKey("toyId", "userId");
+                    b.HasKey("toysId", "usersId");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("usersId");
 
                     b.ToTable("ToysUser");
                 });
@@ -371,15 +374,15 @@ namespace ToyStore.Migrations
                     b.Navigation("category");
                 });
 
-            modelBuilder.Entity("ToyStore.Models.userOrder", b =>
+            modelBuilder.Entity("ToyStore.Models.toysusers", b =>
                 {
                     b.HasOne("ToyStore.Models.Toys", "toy")
                         .WithMany("userOrders")
-                        .HasForeignKey("toyID");
+                        .HasForeignKey("toysID");
 
                     b.HasOne("ToyStore.Models.User", "user")
-                        .WithMany("userOrders")
-                        .HasForeignKey("userId1");
+                        .WithMany("toysusers")
+                        .HasForeignKey("userId");
 
                     b.Navigation("toy");
 
@@ -390,13 +393,13 @@ namespace ToyStore.Migrations
                 {
                     b.HasOne("ToyStore.Models.Toys", null)
                         .WithMany()
-                        .HasForeignKey("toyId")
+                        .HasForeignKey("toysId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ToyStore.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("usersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -413,7 +416,7 @@ namespace ToyStore.Migrations
 
             modelBuilder.Entity("ToyStore.Models.User", b =>
                 {
-                    b.Navigation("userOrders");
+                    b.Navigation("toysusers");
                 });
 #pragma warning restore 612, 618
         }

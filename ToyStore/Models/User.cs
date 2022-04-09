@@ -10,7 +10,7 @@ namespace ToyStore.Models
         public string? Street { get; set; } = String.Empty;
         public string House { get; set; } = String.Empty;
 
-        public List<userOrder> userOrders { get; set; } = new List<userOrder>();
-        public List<Toys> toy { get; set; } = new List<Toys>();
+        public List<toysusers> toysusers { get; set; } = new List<toysusers>();
+        public List<Toys> toys { get; set; } = new List<Toys>();
     }
 }

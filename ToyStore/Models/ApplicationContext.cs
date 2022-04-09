@@ -9,7 +9,7 @@ namespace ToyStore.Models
     {
         public DbSet<Category> categories { get; set; }
         public DbSet<Toys> toys { get; set; }
-        public DbSet<userOrder> userOrders { get; set; }
+        public DbSet<toysusers> toysusers { get; set; }
         
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
             {

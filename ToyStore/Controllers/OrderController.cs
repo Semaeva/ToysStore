@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,13 @@ namespace ToyStore.Controllers
     {
         ApplicationContext db;
         private IndexViewModel model = new IndexViewModel();
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public OrderController(ApplicationContext context) {
+        public OrderController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationContext context) {
             db = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [Authorize]
@@ -36,9 +41,9 @@ namespace ToyStore.Controllers
             ViewBag.street = db.Users.Find(userId).Street;
             ViewBag.house = db.Users.Find(userId).House;
             List<SelectListItem> itemsCart = CartList();
-            return View(itemsCart);        
+            return View(itemsCart);
         }
-        
+
         [HttpPost]
         public IActionResult Index(string[] carts, User user)
         {
@@ -48,7 +53,7 @@ namespace ToyStore.Controllers
             foreach (var c in carts) {
 
                 cart.RemoveAll(r => r.Id == Int32.Parse(c));
-                
+
             }
             IndexViewModel toys = new IndexViewModel { Toys = cart };
 
@@ -56,37 +61,58 @@ namespace ToyStore.Controllers
             HttpContext.Session.SetObjectAsJson("ToyNames", toys);
 
             List<SelectListItem> items = CartList();
-       
+
             return View(items);
         }
 
-          [HttpPost]
-        public async Task<ActionResult> SendEmail(string name,string quantity, string email, string phone,string userId, string area,int toyId, string city,string toys, string street, string house)
+        [HttpPost]
+        public async Task<ActionResult> SendEmail(string name, string comment, string quantity, string email, string phone, string userId, string area, List<int> toyId, string city, List<string> toys, string street, string house)
         {
+           
             try
             {
-                var orders = new userOrder()
-            {
-                  toyID = toyId,
-                  userId= userId,
-                  quantity=Int32.Parse(quantity)
-            };
-          
-                db.Add(orders);
-                db.SaveChanges();
+                foreach (var t in toyId)
+                {
+                    var orders = new toysusers()
+                    {
+                        toysID = t,
+                        usersId = userId,
+                        quantity = Int32.Parse(quantity),
+                        comment = comment
+                    };
+               
+                    db.Add(orders);
+                    db.SaveChanges();
+                }
             }
             catch (Exception ex) { }
-            
-              
+            var getTrackingUrl = Url.Action(
+                "GetTracking",
+                "Order",
+                new { usersId=userId,toysId=toyId,quantity= quantity },
+                protocol: HttpContext.Request.Scheme);
+
             EmailService emailService = new EmailService();
+            var items = "";
+            foreach (var item in toys)
+            {
+                items+= "," +item;
+            }
             await emailService.SendEmailAsync(email, "Заказ принят",
-            $" ФИО: {name}, Товар: {toys}, Адрес:{city}, {area},{street}, {house}");
+                $" ФИО: {name}, Товар: {items}, Адрес:{city}, {area},{street}, {house}, ссылка на слежение за состоянием заказа:  <a href='{getTrackingUrl}'>ссылка</a>");
+           
             return Content("Детали заказа можете увидеть в сообщении, высланном на почту");
 
-           // return RedirectToAction("Index");
         }
 
-        private  List<SelectListItem> CartList( ) {
+        public async Task<IActionResult> GetTracking(string userId, string toyId, string quantity)
+        {
+
+            return View();
+        }
+
+
+        private List<SelectListItem> CartList( ) {
             List<SelectListItem> items = new List<SelectListItem>();
              try
             {

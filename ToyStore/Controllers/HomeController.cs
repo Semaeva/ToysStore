@@ -33,12 +33,6 @@ namespace ToyStore.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            //var userId = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Email);
-            //var profile = db.Users.Find(userId).Area;
-            //if (profile == String.Empty)
-            //{
-            //    return RedirectToAction("Create", "Profile");
-            //}
             var category = model.Searching(db);
             ViewBag.category = category;
             var toysModel = db.toys

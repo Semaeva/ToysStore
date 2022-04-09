@@ -3,52 +3,65 @@
  @model   List<SelectListItem>;
 
 @if (Model != null)
-{        
+{
     <div class="total">Общая сумма
-    <div id="summa">0</div> 
+        <div id="summa">0</div> 
     </div>
     @foreach (Toys cart in (List<Toys>)ViewBag.cart)
     {
+        <div class="gridCart">
 
-      <div class="gridCart">
+            <div class="grid-item-cart toy_name">
+                @cart.toy_name <br />
+                <div class="grid-item-cart desc">@cart.description</div>
+                <div class="grid-item-cart price">@cart.price</div> 
 
-      <div class="grid-item-cart toy_name">
-      @cart.toy_name <br />
-      <div class="grid-item-cart desc">@cart.description</div>
-      <div class="grid-item-cart price">@cart.price</div> 
-
-  </div>
+            </div>
             <div class="grid-item-cart"> 
-            <input type="number" name="quantity" value=1 min="1" max="10" class ="numberCart"> 
-           
-             </div>
-    <div class="grid-item-cart newPrice">@cart.price</div> 
+                <input type="number" name="quantity" value=1 min="1" max="10" class ="numberCart"> 
 
-               <form method="post" asp-controller="Order" asp-route-toys="@cart.toy_name" asp-route-toyId="@cart.Id" asp-action="SendEmail">
+            </div>
+            <div class="grid-item-cart newPrice">@cart.price</div> 
 
-         <div id="order">
-        <h3>Ваши данные</h3>
-        
-        <p>ФИО <input type="text" name="name" value="@ViewBag.name"><br></p>
-        <p>E-mail <input type="text" name="email" value="@ViewBag.email"><br></p>
-        <p>Телефон<input type="text" name="phone" value ="@ViewBag.phone"><br></p>
-            <h4>Адрес</h4> <br>
-        <p>Город<input type="text" name ="city" value ="@ViewBag.city"><br></p>
-        <p>Район<input type="text" name="area" value ="@ViewBag.area"><br></p>
-        <p>Улица<input type="text" name="street" value ="@ViewBag.street"><br></p>
-        <p>Дом<input type="text" name="house" value ="@ViewBag.house"><br></p>
-        <input type="text" name="userId" value="@ViewBag.userId" hidden>
-        <input type="text" name="quantity" id="quant" value="1">
-    </div>
-                <input  type="submit"  value="Оформить заказ"/>
-                </form>
-    </div>
 
- 
+        </div>
 
-        <p>@cart.toy_name</p>   
+        <p>@cart.toy_name</p>
     }
-        <form method="post" asp-controller="Order" asp-action="Index">
+    
+        <form method="post" asp-controller="Order" asp-action="SendEmail">
+            <div id="order">
+                <h3>Ваши данные</h3>
+                @foreach (Toys cart_ in (List<Toys>)ViewBag.cart)
+            {
+                                <input type="text" name="toyId" value="@cart_.Id" hidden> <br>
+                                <input type="text" name="toys" value="@cart_.toy_name" hidden> <br>
+
+            }
+
+                <p>ФИО <input type="text" name="name" value="@ViewBag.name"><br></p>
+                <p>E-mail <input type="text" name="email" value="@ViewBag.email"><br></p>
+                <p>Телефон<input type="text" name="phone" value ="@ViewBag.phone"><br></p>
+                <h4>Адрес</h4> <br>
+                <p>Город<input type="text" name ="city" value ="@ViewBag.city"><br></p>
+                <p>Район<input type="text" name="area" value ="@ViewBag.area"><br></p>
+                <p>Улица<input type="text" name="street" value ="@ViewBag.street"><br></p>
+                <p>Дом<input type="text" name="house" value ="@ViewBag.house"><br></p>
+                <p>Комментарии к заказу
+                    <textarea id="comment" name="comment" rows="4" cols="50">
+                    </textarea>
+
+                </p>
+
+                <input type="text" name="userId" value="@ViewBag.userId" hidden>
+                <input type="text" name="quantity" id="quant" value="1" hidden>
+            </div>
+            <input  type="submit"  value="Оформить заказ"/>
+        </form>
+   
+
+
+<form method="post" asp-controller="Order" asp-action="Index">
 
             <table>
                 <tr>
@@ -73,8 +86,7 @@
 
         </form>
 
-    
-}
+   }
 else
 {
 <p>empty</p>}

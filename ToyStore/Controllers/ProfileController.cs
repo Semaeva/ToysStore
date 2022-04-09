@@ -8,14 +8,14 @@ using ToyStore.ViewsModel;
 
 namespace ToyStore.Controllers
 {
-    public class Profile : Controller
+    public class ProfileController : Controller
     {
 
         private ApplicationContext db;
         private IndexViewModel model = new IndexViewModel();
         private readonly UserManager<User> _userManager;
 
-        public Profile( ApplicationContext context,UserManager<User> userManager)
+        public ProfileController( ApplicationContext context,UserManager<User> userManager)
         {
             db = context;
             _userManager = userManager;
@@ -27,13 +27,13 @@ namespace ToyStore.Controllers
             var category = model.Searching(db);
             ViewBag.category = category;
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier );// will give the user's userId
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier );
 
-           var list_profile = db.Users.Where(x => x.Id ==userId)
-                .Include(s=>s.toy)
-                .ToList();
-          return View(list_profile);
-         //  return View();
+            var list_profile = db.Users.Where(a=>a.Id==userId)
+                .Include(x => x.toysusers).ThenInclude(d => d.toys).ToList();
+
+            
+            return View(list_profile);
         }
 
         // GET: Profile/Details/5
@@ -61,25 +61,37 @@ namespace ToyStore.Controllers
         }
 
         // GET: Profile/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(string id)
         {
-            return View();
+            ViewBag.category = model.Searching(db);
+
+            if (id != null)
+            {
+                User user = await db.Users.FirstOrDefaultAsync(p => p.Id == id.ToString());
+                if (user != null)
+                    return View(user);
+            }
+            return NotFound();
         }
 
-        // POST: Profile/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(User user)
         {
-            try
+            var result = db.Users.SingleOrDefault(b => b.Id == user.Id);
+            if (result != null)
             {
-                return RedirectToAction(nameof(Index));
+                result.Street =user.Street;
+                result.City =user.City;
+                result.Area =user.Area;
+                result.UserName =user.UserName;
+                result.House =user.House;
+                result.Phone =user.Phone;
+                db.SaveChanges();
             }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Index");
         }
+
+      
 
         // GET: Profile/Delete/5
         public ActionResult Delete(int id)

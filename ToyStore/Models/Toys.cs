@@ -13,8 +13,8 @@
 
         public Category category { get; set; }
 
-        public List<userOrder> userOrders { get; set; } = new List<userOrder>();
-        public List<User> user { get; set; } = new List<User>();
+        public List<toysusers> toysusers { get; set; } = new List<toysusers>();
+        public List<User> users { get; set; } = new List<User>();
 
 
     }

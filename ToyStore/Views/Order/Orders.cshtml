@@ -15,8 +15,8 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        @foreach(var user in item.user){
-                            @foreach (var categ in user.toy)
+                        @foreach(var user in item.users){
+                            @foreach (var categ in user.toys)
                             {
                         <td>@Html.DisplayFor(modelItem => user.Email)</td>
                         <td>@Html.DisplayFor(modelItem => item.description)</td>

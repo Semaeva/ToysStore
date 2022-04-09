@@ -1,0 +1,36 @@
+﻿@model ToyStore.Models.User
+@{
+    ViewBag.Title = "Редактирование профиля пользователя";
+}
+@*<form method="post" asp-action="Edit" asp-controller="Profile"  asp-route-id="@Model.Id">
+*@    
+    <form method="post" enctype="multipart/form-data" asp-controller="Profile" asp-action="Edit">
+<div class="form-group">
+        <label asp-for="UserName" class="control-label">Имя</label>
+        <input type="text" asp-for="UserName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Street" class="control-label">Улица</label>
+        <input type="text" asp-for="Street" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="City" class="control-label">Город</label>
+        <input type="text" asp-for="City" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Area" class="control-label">Район</label>
+        <input type="text" asp-for="Area" class="form-control" />
+    </div>
+
+<div class="form-group">
+        <label asp-for="House" class="control-label">Дом</label>
+        <input type="text" asp-for="House" class="form-control" />
+    </div>  
+    <div class="form-group">
+        <label asp-for="Phone" class="control-label">Телефон</label>
+        <input type="text" asp-for="Phone" class="form-control" />
+    </div> 
+    <div class="form-group">
+        <input type="submit" value="Сохранить" class="btn btn-default" />
+    </div>
+</form>

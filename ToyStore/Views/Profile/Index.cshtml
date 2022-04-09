@@ -4,26 +4,40 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
+        @foreach (var prof in Model)
+ {
+<div id="personData">
+   
+            <p> Email: @prof.Email</p>    
+            <p> ФИО:  @prof.UserName</p>
+            <p> Телефон: @prof.Phone</p>
+            <p> Район: @prof.Area</p>
+            <p> Город: @prof.City</p>
+            <p> Улица: @prof.Street</p>
+            <p> Дом: @prof.House</p>
 
-<table class="table">
-    <tr><th>Email</th><th>ФИО</th><th>Телефон</th><th>Город</th><th>УЛица</th><th>Дом</th></tr>
-    @foreach (var prof in Model)
-    {
-        <tr>
-            <td>@prof.Email</td>
-            <td>@prof.UserName</td>
-            <td>@prof.PhoneNumber</td>
-            <td>@prof.City</td>
-            <td>@prof.Street</td>
-            <td>@prof.House</td>
-           @* <td>
-                <form asp-action="Delete" asp-route-id="@prof.Id" method="post">
-                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@prof.Id">Изменить</a>
-                    <button type="submit" class="btn btn-sm btn-danger">
-                        Удалить
-                    </button>
-                </form>
-            </td>*@
-        </tr>
-    }
-</table>
+            <p>   <a asp-action="Edit" asp-controller="Profile" asp-route-id="@prof.Id">Изменить</a> </p>
+
+</div>
+<h3>Мои заказы</h3>
+<div id=orders>
+        
+                <table>
+                    <tr>
+                        <th>Игрушка</th><th>Цена</th><th>Количество</th>
+                    </tr>
+                     @foreach(var toy in @prof.toysusers)
+                     {
+                    <tr> 
+                    <td>@toy.toys.toy_name </td>
+                    <td> @toy.toys.price</td>
+                    <td> @toy.quantity</td>
+                      </tr>
+                    }
+                  
+
+                </table>
+
+                         
+</div>
+ }
