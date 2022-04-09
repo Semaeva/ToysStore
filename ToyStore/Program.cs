@@ -24,7 +24,8 @@ builder.Services.AddDbContextPool<ApplicationContext>(options => options.UseMySq
 builder.Services.AddIdentity<User, IdentityRole>(
     opts =>
     {
-        opts.User.RequireUniqueEmail = true;
+        opts.User.AllowedUserNameCharacters = null;
+        //  opts.User.RequireUniqueEmail = true;
         opts.Password.RequiredLength = 5;   // минимальная длина
         opts.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
         opts.Password.RequireLowercase = false; // требуются ли символы в нижнем регистре

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ToyStore.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class NewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -37,6 +37,16 @@ namespace ToyStore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Phone = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    City = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Area = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Street = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    House = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -79,38 +89,6 @@ namespace ToyStore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_categories", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "UserRole",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRole", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    email = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    passw = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -250,7 +228,6 @@ namespace ToyStore.Migrations
                     toy_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     price = table.Column<float>(type: "float", nullable: false),
-                    summa = table.Column<float>(type: "float", nullable: false),
                     description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     categoryID = table.Column<int>(type: "int", nullable: true)
@@ -267,78 +244,59 @@ namespace ToyStore.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "UserRoleUsers",
+                name: "ToysUser",
                 columns: table => new
                 {
-                    Usersid = table.Column<int>(type: "int", nullable: false),
-                    userRolesId = table.Column<int>(type: "int", nullable: false)
+                    toysId = table.Column<int>(type: "int", nullable: false),
+                    usersId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRoleUsers", x => new { x.Usersid, x.userRolesId });
+                    table.PrimaryKey("PK_ToysUser", x => new { x.toysId, x.usersId });
                     table.ForeignKey(
-                        name: "FK_UserRoleUsers_UserRole_userRolesId",
-                        column: x => x.userRolesId,
-                        principalTable: "UserRole",
+                        name: "FK_ToysUser_AspNetUsers_usersId",
+                        column: x => x.usersId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserRoleUsers_Users_Usersid",
-                        column: x => x.Usersid,
-                        principalTable: "Users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "ToysUsers",
-                columns: table => new
-                {
-                    toyId = table.Column<int>(type: "int", nullable: false),
-                    userid = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ToysUsers", x => new { x.toyId, x.userid });
-                    table.ForeignKey(
-                        name: "FK_ToysUsers_toys_toyId",
-                        column: x => x.toyId,
+                        name: "FK_ToysUser_toys_toysId",
+                        column: x => x.toysId,
                         principalTable: "toys",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ToysUsers_Users_userid",
-                        column: x => x.userid,
-                        principalTable: "Users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "userOrder",
+                name: "toysusers",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    quantity = table.Column<int>(type: "int", nullable: false),
-                    toyID = table.Column<int>(type: "int", nullable: true),
-                    userId = table.Column<int>(type: "int", nullable: true)
+                    quantity = table.Column<int>(type: "int", nullable: true),
+                    toysID = table.Column<int>(type: "int", nullable: true),
+                    usersId = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    userId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    comment = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_userOrder", x => x.id);
+                    table.PrimaryKey("PK_toysusers", x => x.id);
                     table.ForeignKey(
-                        name: "FK_userOrder_toys_toyID",
-                        column: x => x.toyID,
-                        principalTable: "toys",
+                        name: "FK_toysusers_AspNetUsers_userId",
+                        column: x => x.userId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_userOrder_Users_userId",
-                        column: x => x.userId,
-                        principalTable: "Users",
-                        principalColumn: "id");
+                        name: "FK_toysusers_toys_toysID",
+                        column: x => x.toysID,
+                        principalTable: "toys",
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -385,24 +343,19 @@ namespace ToyStore.Migrations
                 column: "categoryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ToysUsers_userid",
-                table: "ToysUsers",
-                column: "userid");
+                name: "IX_ToysUser_usersId",
+                table: "ToysUser",
+                column: "usersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_userOrder_toyID",
-                table: "userOrder",
-                column: "toyID");
+                name: "IX_toysusers_toysID",
+                table: "toysusers",
+                column: "toysID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_userOrder_userId",
-                table: "userOrder",
+                name: "IX_toysusers_userId",
+                table: "toysusers",
                 column: "userId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRoleUsers_userRolesId",
-                table: "UserRoleUsers",
-                column: "userRolesId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -423,13 +376,10 @@ namespace ToyStore.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ToysUsers");
+                name: "ToysUser");
 
             migrationBuilder.DropTable(
-                name: "userOrder");
-
-            migrationBuilder.DropTable(
-                name: "UserRoleUsers");
+                name: "toysusers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -439,12 +389,6 @@ namespace ToyStore.Migrations
 
             migrationBuilder.DropTable(
                 name: "toys");
-
-            migrationBuilder.DropTable(
-                name: "UserRole");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "categories");

@@ -17,12 +17,14 @@ namespace ToyStore.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private ApplicationContext db;
 
-        public Account(UserManager<User> userManager, SignInManager<User> signInManager)
+        public Account(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-        }
+            db = context;
+                }
         [HttpGet]
         public IActionResult Register()
         {
@@ -33,7 +35,7 @@ namespace ToyStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email };
+                User user = new User { Email = model.Email, UserName = model.UserName };
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -71,22 +73,41 @@ namespace ToyStore.Controllers
             {
                 return View("Error");
             }
-            var user = await _userManager.FindByIdAsync(userId);
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+           
             if (user == null)
             {
                 return View("Error");
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            if (result.Succeeded)
-                return RedirectToAction("Index", "Home");
-            else
-                return View("Error");
+                if (result.Succeeded)
+                {
+                    //   var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
+                    var profile = db.Users.Find(userId).Area;
+                    if (profile==String.Empty)
+                    {
+                        return RedirectToAction("Create", "Profile");
+                    }
+
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return View("Error");
+                }
+
+            }
+            catch (Exception ex) { }
+            return View("Error");
+
         }
 
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-
+            
             LoginModel model = new LoginModel
             {
                 ReturnUrl = returnUrl,
@@ -94,9 +115,6 @@ namespace ToyStore.Controllers
             };
      
                 return View(model);
-
-   
-
         }
 
         [AllowAnonymous]
@@ -143,17 +161,14 @@ namespace ToyStore.Controllers
                 return View("Login", loginViewModel);
             }
 
-            // If the user already has a login (i.e if there is a record in AspNetUserLogins
-            // table) then sign-in the user with this external login provider
             var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider,
-                info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+                info.ProviderKey, isPersistent: false,  bypassTwoFactor: true);
 
             if (signInResult.Succeeded)
             {
                 return LocalRedirect(returnUrl);
             }
-            // If there is no record in AspNetUserLogins table, the user may not have
-            // a local account
+          
             else
             {
                 // Get the email claim value
@@ -168,7 +183,7 @@ namespace ToyStore.Controllers
                     {
                         user = new User
                         {
-                            UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            UserName = info.Principal.FindFirstValue(ClaimTypes.Name),
                             Email = info.Principal.FindFirstValue(ClaimTypes.Email)
                         };
 
@@ -207,6 +222,7 @@ namespace ToyStore.Controllers
             string pattern = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
 
+            
             if (model.ExternalLogins==null)
             {
                 if (Regex.IsMatch(model.Email, pattern, RegexOptions.IgnoreCase))
@@ -251,15 +267,7 @@ namespace ToyStore.Controllers
             return View(model_);
         }
 
-     //   //[HttpPost]
-     ////   [ValidateAntiForgeryToken]
-     //   public async Task<IActionResult> LogOff()
-     //   {
-     //       return RedirectToAction("Login", "Account");            // удаляем аутентификационные куки
-     //       //await _signInManager.SignOutAsync();
-     //       //return RedirectToAction("Login", "Account");
-     //   }
-
+   
 
     }
 }

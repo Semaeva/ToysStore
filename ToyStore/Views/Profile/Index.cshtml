@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ToyStore.Models.User>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+        @foreach (var prof in Model)
+ {
+<div id="personData">
+   
+            <p> Email: @prof.Email</p>    
+            <p> ФИО:  @prof.UserName</p>
+            <p> Телефон: @prof.Phone</p>
+            <p> Район: @prof.Area</p>
+            <p> Город: @prof.City</p>
+            <p> Улица: @prof.Street</p>
+            <p> Дом: @prof.House</p>
+
+            <p>   <a asp-action="Edit" asp-controller="Profile" asp-route-id="@prof.Id">Изменить</a> </p>
+
+</div>
+<h3>Мои заказы</h3>
+<div id=orders>
+        
+                <table>
+                    <tr>
+                        <th>Игрушка</th><th>Цена</th><th>Количество</th>
+                    </tr>
+                     @foreach(var toy in @prof.toysusers)
+                     {
+                    <tr> 
+                    <td>@toy.toys.toy_name </td>
+                    <td> @toy.toys.price</td>
+                    <td> @toy.quantity</td>
+                      </tr>
+                    }
+                  
+
+                </table>
+
+                         
+</div>
+ }
