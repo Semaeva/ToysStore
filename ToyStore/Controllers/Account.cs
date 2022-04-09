@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using ToyStore.EmailServices;
 using ToyStore.Models;
+using ToyStore.Models.PasswordChange;
 using ToyStore.ViewsModel;
 
 namespace ToyStore.Controllers
@@ -88,7 +89,7 @@ namespace ToyStore.Controllers
                     var profile = db.Users.Find(userId).Area;
                     if (profile==String.Empty)
                     {
-                        return RedirectToAction("Create", "Profile");
+                        return RedirectToAction("Edit", "Profile", new {Id = userId });
                     }
 
                     return RedirectToAction("Index", "Home");
@@ -205,8 +206,69 @@ namespace ToyStore.Controllers
             }
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string code = null)
+        {
+            return code == null ? View("Error") : View();
+        }
 
-      //  [HttpPost]
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return View("ResetPasswordConfirmation");
+            }
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return View("ResetPasswordConfirmation");
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(model);
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                {
+                    return View("ForgotPasswordConfirmation");
+                }
+
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                EmailService emailService = new EmailService();
+                await emailService.SendEmailAsync(model.Email, "Reset Password",
+                    $"Для сброса пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>");
+                return View("ForgotPasswordConfirmation");
+            }
+            return View(model);
+        }
+
         public async Task<IActionResult> LogOff()
         {
             await _signInManager.SignOutAsync();
@@ -222,13 +284,14 @@ namespace ToyStore.Controllers
             string pattern = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
 
-            
+
             if (model.ExternalLogins==null)
             {
                 if (Regex.IsMatch(model.Email, pattern, RegexOptions.IgnoreCase))
                 {
-                    var user = await _userManager.FindByNameAsync(model.Email);
-                    if (user != null)
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                var password = await _userManager.CheckPasswordAsync(user, model.Password);
+                if (user != null)
                     {
                         // проверяем, подтвержден ли email
                         if (!await _userManager.IsEmailConfirmedAsync(user))
@@ -237,8 +300,9 @@ namespace ToyStore.Controllers
                             return View(model);
                         }
                     }
-
-                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                if (password)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
                     if (result.Succeeded)
                     {
                         // проверяем, принадлежит ли URL приложению
@@ -251,14 +315,13 @@ namespace ToyStore.Controllers
                             return RedirectToAction("Index", "Home");
                         }
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "Неправильный логин и (или) пароль");
-                    }
                 }
+                else
+                {
+                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                }
+               }
             }
-            ViewBag.ErrorMessage = "Email не найден";
-
             LoginModel model_ = new LoginModel
             {
                 ReturnUrl = returnUrl,

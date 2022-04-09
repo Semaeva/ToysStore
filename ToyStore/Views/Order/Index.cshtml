@@ -15,18 +15,16 @@
                 @cart.toy_name <br />
                 <div class="grid-item-cart desc">@cart.description</div>
                 <div class="grid-item-cart price">@cart.price</div> 
-
             </div>
             <div class="grid-item-cart"> 
                 <input type="number" name="quantity" value=1 min="1" max="10" class ="numberCart"> 
-
             </div>
             <div class="grid-item-cart newPrice">@cart.price</div> 
-
-
         </div>
 
         <p>@cart.toy_name</p>
+
+         <a asp-action="Details" asp-controller="Order" asp-route-id="@cart.Id">Подробнее</a>
     }
     
         <form method="post" asp-controller="Order" asp-action="SendEmail">

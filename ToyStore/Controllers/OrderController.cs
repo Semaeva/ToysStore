@@ -149,9 +149,17 @@ namespace ToyStore.Controllers
 
 
         // GET: OrderController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
+        public async Task<ActionResult> Details(int? id)
+            {
+            ViewBag.category = model.Searching(db);
+
+            if (id != null)
+            {
+                Toys toy = await db.toys.FirstOrDefaultAsync(p => p.Id == id);
+                if (toy != null)
+                    return View(toy);
+            }
+            return NotFound();
         }
 
         // GET: OrderController/Create
