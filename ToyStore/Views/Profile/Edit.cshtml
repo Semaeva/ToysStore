@@ -2,8 +2,7 @@
 @{
     ViewBag.Title = "Редактирование профиля пользователя";
 }
-@*<form method="post" asp-action="Edit" asp-controller="Profile"  asp-route-id="@Model.Id">
-*@    
+<h3>Ваши данные</h3>
     <form method="post" enctype="multipart/form-data" asp-controller="Profile" asp-action="Edit">
 <div class="form-group">
         <label asp-for="UserName" class="control-label">Имя</label>

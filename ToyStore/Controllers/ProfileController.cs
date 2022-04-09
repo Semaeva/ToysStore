@@ -24,8 +24,8 @@ namespace ToyStore.Controllers
         // GET: Profile
         public ActionResult Index()
         {
-            var category = model.Searching(db);
-            ViewBag.category = category;
+            ViewBag.category = model.Searching(db);
+          
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier );
 
@@ -55,7 +55,7 @@ namespace ToyStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(model);
+                db.Users.Update(model);
             }
             return RedirectToAction("Index", "Home");
         }

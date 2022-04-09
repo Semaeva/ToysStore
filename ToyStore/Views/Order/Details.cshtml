@@ -1,0 +1,17 @@
+﻿@model ToyStore.Models.Toys
+@{
+    ViewBag.Title = Model.toy_name;
+}
+<h2>Товар @Model.toy_name</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Идентификатор</dt>
+        <dd>@Model.Id</dd>
+ 
+        <dt>Опиcание</dt>
+        <dd>@Model.description</dd>
+
+         <dt>Цена</dt>
+        <dd>@Model.price</dd>
+    </dl>
+</div>

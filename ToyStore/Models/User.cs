@@ -4,7 +4,7 @@ namespace ToyStore.Models
 {
     public class User : IdentityUser
     {
-        public string? Phone { get; set; }   = String.Empty;
+        public string? Phone { get; set; } = String.Empty;
         public string? City { get; set; } = String.Empty;
         public string? Area { get; set; } = String.Empty;
         public string? Street { get; set; } = String.Empty;
