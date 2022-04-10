@@ -1,0 +1,31 @@
+﻿@model ToyStore.Models.Toys
+@{
+    ViewBag.Title = "Редактирование товара";
+}
+@{
+    Layout = null;
+}
+<h3>редактировать</h3>
+    <form method="post" enctype="multipart/form-data" asp-controller="Toys" asp-action="Edit">
+<div class="form-group">
+        <label asp-for="toy_name" class="control-label">Наименование</label>
+        <input type="text" asp-for="toy_name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="description" class="control-label">Описание</label>
+        <input type="text" asp-for="description" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="price" class="control-label">цена</label>
+        <input type="text" asp-for="price" class="form-control" />
+    </div>
+       <div>
+     <label  class="control-label"> Категория</label>
+               <select name="categoryID" class="form-control" asp-items="@ViewBag.listCategories"></select>
+    </div>
+
+
+    <div class="form-group">
+        <input type="submit" value="Сохранить" class="btn btn-default" />
+    </div>
+</form>

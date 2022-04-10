@@ -1,0 +1,35 @@
+﻿@model ToyStore.Models.Toys
+@{
+    Layout = null;
+}
+
+<h3>Заполните форму</h3>
+
+ <form asp-action="Create" asp-controller="Toys"  method="post">
+
+   <div asp-validation-summary="ModelOnly"></div>
+  
+    <div>
+        <label asp-for="toy_name"></label><br />
+        <input asp-for="toy_name" />
+        <span asp-validation-for="toy_name"></span>
+    </div>
+    <div>
+        <label asp-for="description"></label><br />
+        <input asp-for="description" />
+        <span asp-validation-for="description"></span>
+    </div>  
+    <div>
+        <label asp-for="price"></label><br />
+        <input asp-for="price" />
+        <span asp-validation-for="price"></span>
+    </div> 
+    <div>
+<label  class="control-label"> Категория</label>
+               <select name="categoryID" class="form-control" asp-items="@ViewBag.listCategories"></select>
+
+    </div>
+    <div>
+        <input type="submit" value="Добавить" />
+    </div>
+                </form>

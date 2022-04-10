@@ -7,8 +7,6 @@ using ToyStore.ViewsModel;
 
 namespace ToyStore.Controllers
 {
-
-
     [Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
